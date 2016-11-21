@@ -11,6 +11,7 @@ class Guest(models.Model):
     invited_by = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Invité par')
     type = models.ForeignKey('Type', null=False, blank=False, verbose_name='Type')
     created_at = models.DateTimeField(auto_now_add=True)
+    max_seats = models.IntegerField(default=1)
 
     def __str__(self):
         return self.name
@@ -21,7 +22,6 @@ class Type(models.Model):
         verbose_name = 'Type'
 
     name = models.CharField(max_length=255, verbose_name='Nom')
-    max_seats = models.IntegerField()
 
     def __str__(self):
         return self.name

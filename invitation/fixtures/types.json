@@ -1,0 +1,1 @@
+[{"model": "invitation.type", "pk": 1, "fields": {"name": "Diplom\u00e9"}}, {"model": "invitation.type", "pk": 2, "fields": {"name": "Invit\u00e9"}}]
