@@ -9,7 +9,7 @@ class Guest(models.Model):
         verbose_name = 'invité'
 
     name = models.CharField(max_length=255, verbose_name='nom')
-    email = models.EmailField()
+    email = models.EmailField(blank=True)
     invited_by = models.ForeignKey(
         'self',
         on_delete=models.SET_NULL,
