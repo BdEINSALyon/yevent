@@ -10,8 +10,20 @@ class Guest(models.Model):
 
     name = models.CharField(max_length=255, verbose_name='nom')
     email = models.EmailField()
-    invited_by = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='invité par', related_name='guests')
-    type = models.ForeignKey('Type', null=False, blank=False, verbose_name='type')
+    invited_by = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='invité par',
+        related_name='guests'
+    )
+    type = models.ForeignKey(
+        'Type',
+        null=False,
+        blank=False,
+        verbose_name='type'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     max_seats = models.IntegerField(default=1)
 
@@ -40,4 +52,9 @@ class Order(models.Model):
 
     yurplan_id = models.CharField(max_length=100, verbose_name='ID Yurplan')
     seats_count = models.IntegerField(verbose_name='nombre de places')
-    guest = models.ForeignKey('Guest', null=False, blank=False, related_name='orders')
+    guest = models.ForeignKey(
+        'Guest',
+        null=False,
+        blank=False,
+        related_name='orders'
+    )
