@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
+from invitation import views
+
 urlpatterns = [
-    url(r'^shop$', TemplateView.as_view(template_name='shop.html'), name='shop')
+    url(r'^shop$', views.ShopView.as_view(), name='shop')
 ]
