@@ -25,7 +25,7 @@ SECRET_KEY = 'ohyav@yf+nx1wn-ygmfnmtyd%qf*h=c@6&c_l+sl$fv7babl+*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gala.dev.bde-insa-lyon.fr', 'billets.gala.bde-insa-lyon.fr', 'localhost']
 
 
 # Application definition
