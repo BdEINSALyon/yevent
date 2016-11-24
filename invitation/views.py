@@ -4,7 +4,7 @@ from time import time
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import SimpleTemplateResponse
-from django.utils.timezone import utc
+from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -32,7 +32,7 @@ class ShopView(TemplateView):
             return SimpleTemplateResponse('invitation/wait.html', {'code': security_code})
 
         # Update last seen time
-        guest.last_seen_at = datetime.utcnow()
+        guest.last_seen_at = timezone.now()
         guest.save()
 
         # Determine reverse to use
@@ -78,7 +78,7 @@ class PingView(View):
         guest = get_object_or_404(models.Guest, code=data['user'])
 
         #  Update last seen time
-        guest.last_seen_at = datetime.utcnow()
+        guest.last_seen_at = timezone.now()
         guest.save()
 
         return JsonResponse({'success': True, 'code': params['code']}, safe=False)
