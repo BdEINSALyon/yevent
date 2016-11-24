@@ -10,4 +10,10 @@ class ShopView(TemplateView):
     """
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
+        if request.META['HTTP_HOST'] == 'gala.dev.bde-insa-lyon.fr:8000':
+            context['shop_url'] = 'http://yurplan.bde-insa-lyon.fr:8000/event/Lavage-Ecoflute/12752/tickets/widget?'\
+                                  'from=widget&default_culture=fr'
+        else:
+            context['shop_url'] = 'https://yurplan.bde-insa-lyon.fr/event/Lavage-Ecoflute/12752/tickets/widget?' \
+                                  'from=widget&default_culture=fr'
         return self.render_to_response(context)
