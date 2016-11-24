@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="text-center">
+        <h3>Erreur : Ce code d'inscription est déjà en cours d'utilisation</h3>
+        <p>Vous pouvez patientez sur cette pages pour attendre la fin de l'utilisation précédente.
+            Vérifiez que vous n'avez pas ouvert plusieurs fois le lien.</p>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        var code = "{{ code }}";
+        $(function(){
+            function test() {
+                $.get('/shop/available/'+code, function (result) {
+                    if(result.success){
+                        window.location.reload();
+                    }
+                });
+            }
+            setInterval(test, 1500);
+        });
+    </script>
+{% endblock %}

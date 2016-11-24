@@ -20,5 +20,7 @@ from invitation import views
 
 urlpatterns = [
     url(r'^shop/(?P<code>[A-Za-z0-9\-]*)$', views.ShopView.as_view(), name='shop'),
-    url(r'^shop/config/(?P<code>[A-Za-z0-9+/=]*)$', views.ConfigView.as_view(), name='config')
+    url(r'^shop/config/(?P<code>[A-Za-z0-9+/=]*)$', views.ConfigView.as_view(), name='config'),
+    url(r'^shop/available/(?P<code>[A-Za-z0-9+/=]*)$', views.AvailableView.as_view(), name='available'),
+    url(r'^shop/ping/(?P<code>[A-Za-z0-9+/=]*)$', views.PingView.as_view(), name='ping')
 ]
