@@ -8,7 +8,9 @@ class Guest(models.Model):
     class Meta:
         verbose_name = 'invité'
 
-    name = models.CharField(max_length=255, verbose_name='nom')
+    first_name = models.CharField(max_length=255, verbose_name='prénom')
+    last_name = models.CharField(max_length=255, verbose_name='nom')
+    code = models.CharField(max_length=255, verbose_name='code', default='', unique=True)
     email = models.EmailField(blank=True)
     invited_by = models.ForeignKey(
         'self',
