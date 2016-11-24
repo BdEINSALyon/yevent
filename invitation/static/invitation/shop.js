@@ -13,6 +13,8 @@ var shop = {};
     const SHOP_SUCCESS = 'SUCCESS';
 
     shop.state = SHOP_NOT_READY;
+    shop.tickets = {};
+    shop.guest = {};
     shop.registerState = function (state) {
         if(shop.state != state){
             shop.state = state;
@@ -30,6 +32,10 @@ var shop = {};
     $(function(){
         document.domain = 'bde-insa-lyon.fr';
         var $iframe = $("#yurplan-iframe");
+
+        $.get('/shop/config/'+$iframe.data('auth'), function(response){
+            shop.guest = response;
+        });
 
         setInterval(function shopStateDetection(){
             var $shop = null;
@@ -67,6 +73,31 @@ var shop = {};
                     } else if($shop.find('.ticket-event').length>0) {
                         shop.state = SHOP_SELECTING_PRODUCTS;
                     }
+                    break;
+                case SHOP_SELECTING_PRODUCTS:
+                    // Store all current value for tickets numbers
+                    $shop.find('select.nbSeat').each(function () {
+                        shop.tickets[$(this).attr('name')]=parseInt($(this).val());
+                    });
+
+                    // Compute amount of tickets left
+                    var left = (shop.guest.left_seats||0) - _.reduce(_.values(shop.tickets), function(memo, num){ return memo + num; });
+
+                    // Display allowed values only
+                    $shop.find('select.nbSeat').each(function () {
+                        var selected = parseInt($(this).val());
+                        $(this).children().each(function(){ // Children of select are options
+                            if(parseInt($(this).attr('value')) > selected + left){
+                                // Option is hidden if it will exceed amount of allowed tickets
+                                $(this).hide();
+                            } else {
+                                // Else display it
+                                $(this).show();
+                            }
+                        })
+                    });
+                    break;
+
             }
 
             // Update display
