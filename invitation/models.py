@@ -27,8 +27,20 @@ class Guest(models.Model):
         verbose_name='type'
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    max_seats = models.IntegerField(default=1)
-    last_seen_at = models.DateTimeField(verbose_name='dernière visite', default=0)
+
+    def type_max_seats(self):
+        if self.type:
+            return self.type.default_max_seats
+        else:
+            return 1
+
+    def __init__(self, *args, **kwargs):
+        super(Guest, self).__init__(*args, **kwargs)
+        if not self.id:
+            self.max_seats = self.type_max_seats()
+
+    max_seats = models.IntegerField()
+    last_seen_at = models.DateTimeField(verbose_name='dernière visite', auto_created=True, null=True)
 
     def available_seats(self):
         order_seats = self.orders.aggregate(count=Coalesce(Sum('seats_count'), 0)).get('count', 0)
@@ -36,7 +48,7 @@ class Guest(models.Model):
         return self.max_seats - order_seats - guests_count
 
     def __str__(self):
-        return self.name
+        return "{} {}".format(self.first_name, self.last_name)
 
 
 class Type(models.Model):
@@ -44,6 +56,7 @@ class Type(models.Model):
         verbose_name = 'type'
 
     name = models.CharField(max_length=255, verbose_name='nom')
+    default_max_seats = models.IntegerField(default=7)
 
     def __str__(self):
         return self.name
