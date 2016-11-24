@@ -19,5 +19,5 @@ from django.views.generic import TemplateView
 from invitation import views
 
 urlpatterns = [
-    url(r'^shop$', views.ShopView.as_view(), name='shop')
+    url(r'^shop/(?P<code>[A-Za-z0-9\-]*)$', views.ShopView.as_view(), name='shop')
 ]
