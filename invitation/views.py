@@ -1,5 +1,6 @@
 from time import time
 
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.views.generic import TemplateView
@@ -31,3 +32,18 @@ class ShopView(TemplateView):
         return self.render_to_response(context)
 
 
+class ConfigView(View):
+    def get(self,request, *args, **params):
+        data = security.decrypt(params['code'])
+        guest = get_object_or_404(models.Guest, code=data['user'])
+        return JsonResponse({
+            'first_name': guest.first_name,
+            'last_name': guest.last_name,
+            'email': guest.email,
+            'invited_by': guest.invited_by and {
+                'first_name': guest.invited_by.first_name,
+                'last_name': guest.invited_by.last_name
+            } or None,
+            'max_seats': guest.max_seats,
+            'left_seats': guest.available_seats()
+        }, safe=False)
