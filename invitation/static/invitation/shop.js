@@ -13,6 +13,19 @@ var shop = {};
     const SHOP_SUCCESS = 'SUCCESS';
 
     shop.state = SHOP_NOT_READY;
+    shop.registerState = function (state) {
+        if(shop.state != state){
+            shop.state = state;
+        }
+    };
+    shop.hasState = function(states){
+        if(!(states instanceof Array))
+            states = [states];
+        return states.indexOf(shop.state) >= 0;
+    };
+    shop.hasNotState = function(states){
+        return !shop.hasState(states);
+    };
 
     $(function(){
         document.domain = 'bde-insa-lyon.fr';
@@ -20,6 +33,8 @@ var shop = {};
 
         setInterval(function shopStateDetection(){
             var $shop = null;
+
+            // Retrieve iFrame content
             try {
                 $shop = $iframe.contents();
             } catch(e){ // Can not access to the iFrame content
@@ -29,15 +44,17 @@ var shop = {};
                 return;
             }
 
-            if($shop.find('.password_event').length>0 && [SHOP_NOT_READY, SHOP_LOGGING].indexOf(shop.state)) {
+            // If user come back to the start state, go to not ready mode
+            if($shop.find('.password_event').length>0 && shop.hasNotState([SHOP_NOT_READY, SHOP_LOGGING])) {
                 shop.state = SHOP_NOT_READY;
             }
 
+            // Listening loops by states
             switch(shop.state){
                 case SHOP_NOT_READY:
                     if($shop.find('.password_event').length>0){
                         shop.state = SHOP_LOGGING;
-                        $iframe.one('load', function(){
+                        $iframe.one('load', function(){ // When form has been loaded
                             $shop = $iframe.contents();
                             if($shop.find('.password_event').length>0){
                                 shop.state = SHOP_NOT_READY;
@@ -51,7 +68,9 @@ var shop = {};
                         shop.state = SHOP_SELECTING_PRODUCTS;
                     }
             }
-            if(shop.state != SHOP_NOT_READY && shop.state != SHOP_LOGGING) {
+
+            // Update display
+            if(shop.hasNotState([SHOP_NOT_READY, SHOP_LOGGING])) {
                 if($iframe.css('display') == 'none'){
                     $iframe.show();
                 }
