@@ -33,9 +33,12 @@ class Guest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def type_max_seats(self):
-        if self.type:
-            return self.type.default_max_seats
-        else:
+        try:
+            if self.type:
+                return self.type.default_max_seats
+            else:
+                return 1
+        except:
             return 1
 
     def __init__(self, *args, **kwargs):
