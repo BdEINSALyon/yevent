@@ -63,6 +63,10 @@ class ShopView(TemplateView):
 
         # Add security code to context
         context['code'] = security_code
+        context['guest'] = guest
+
+        # Inject limit seats to context
+        context['seats_left'] = guest.available_seats()
 
         return self.render_to_response(context)
 

@@ -9,12 +9,22 @@ $(function(){
         $.get('/ping');
     }, 1000);
 
-    $('.nav a').click(function () {
+    $('a').click(function () {
         var link = $(this);
         $.get('/halt', function() {
            window.location = link.attr('href');
         });
         return false;
-    })
+    });
+    $(window).on('unload', function () {
+        console.log('Unload!');
+        $.ajax({
+            type: 'GET',
+            async: false,
+            url: '/halt'
+        }, function () {
+            console.log('Halted')
+        });
+    });
 
 });
