@@ -2,7 +2,7 @@ from django import forms
 
 
 class GuestForm(forms.Form):
-    first_name = forms.CharField(label='prénom', max_length=255)
-    last_name = forms.CharField(label='nom', max_length=255)
-    email = forms.EmailField(label='email', max_length=255)
-    max_seats = forms.IntegerField(label='nombre de places', min_value=0, max_seats=1600)
+    first_name = forms.CharField(label='Prénom', max_length=255)
+    last_name = forms.CharField(label='Nom', max_length=255)
+    email = forms.EmailField(label='Email', max_length=255)
+    max_seats = forms.ChoiceField(label='Nombre de places', choices=[(i, i) for i in range(11)])

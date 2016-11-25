@@ -1,7 +1,11 @@
 # coding=utf-8
+from time import time
+
 from django.db import models
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
+
+from invitation import security
 
 
 class Guest(models.Model):
@@ -44,8 +48,11 @@ class Guest(models.Model):
 
     def available_seats(self):
         order_seats = self.orders.aggregate(count=Coalesce(Sum('seats_count'), 0)).get('count', 0)
-        guests_count = self.guests.count()
+        guests_count = self.guests.aggregate(count=Coalesce(Sum('max_seats'), 0)).get('count', 0)
         return self.max_seats - order_seats - guests_count
+
+    def auth_token(self):
+        return security.encrypt({'time': time(), 'user': self.code})
 
     def __str__(self):
         return "{} {}".format(self.first_name, self.last_name)

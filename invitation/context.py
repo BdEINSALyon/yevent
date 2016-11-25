@@ -1,3 +1,6 @@
+from invitation import models
+from invitation import security
+
 
 def user_code(request):
     return {

@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
+from invitation import ping
 from invitation import views
 
 urlpatterns = [
@@ -24,5 +25,7 @@ urlpatterns = [
     url(r'^shop/available/(?P<code>[A-Za-z0-9+/=]*)$', views.AvailableView.as_view(), name='available'),
     url(r'^shop/ping/(?P<code>[A-Za-z0-9+/=]*)$', views.PingView.as_view(), name='ping'),
     url(r'^shop/complete/(?P<code>[A-Za-z0-9+/=]*)$', views.CompleteView.as_view(), name='complete'),
-    url(r'^invite/(?P<code>[A-Za-z0-9+/=\-]*)$', views.InviteView.as_view(), name='invite')
+    url(r'^invite/(?P<code>[A-Za-z0-9+/=\-]*)$', views.InviteView.as_view(), name='invite'),
+    url(r'^ping$', ping.ping, name='ping'),
+    url(r'^halt$', ping.halt, name='halt')
 ]

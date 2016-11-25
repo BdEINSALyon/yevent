@@ -15,7 +15,11 @@
             function test() {
                 $.get('/shop/available/'+code, function (result) {
                     if(result.success){
-                        window.location.reload();
+                        var next = '{{ next_url }}';
+                        if(window.location.href == next)
+                            window.location.reload();
+                        else
+                            window.location.href = next;
                     }
                 });
             }
