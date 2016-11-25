@@ -139,6 +139,8 @@ class InviteView(FormView):
         reject = try_to_reject(guest, request)
         if reject is not None:
             return reject
+        if guest.invited_by is not None:
+            return self.render_to_response({'guest': guest, 'nope':True})
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
