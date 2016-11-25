@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 
 from invitation import models
 from invitation import security
+from invitation.models import Order
 
 
 class ShopView(TemplateView):
@@ -27,7 +28,7 @@ class ShopView(TemplateView):
         security_code = security.encrypt({'time': time(), 'user': params['code']})
 
         # Check and update last seen time
-        if guest.last_seen_at and (datetime.now() - guest.last_seen_at.replace(tzinfo=None)).seconds < 15:
+        if guest.last_seen_at and (datetime.now() - guest.last_seen_at.replace(tzinfo=None)).seconds < 0:
             # This user is probably logged we render a waiting template
             return SimpleTemplateResponse('invitation/wait.html', {'code': security_code})
 
@@ -38,7 +39,7 @@ class ShopView(TemplateView):
         # Determine reverse to use
         if request.META['HTTP_HOST'] == 'gala.dev.bde-insa-lyon.fr:8000':
             context['shop_url'] = 'http://yurplan.bde-insa-lyon.fr:8000/event/Lavage-Ecoflute/12752/tickets/widget?'\
-                                  'from=widget&default_culture=fr&firstname={first_name}&lastname={last_name}&' \
+                                  'code=GG&default_culture=fr&firstname={first_name}&lastname={last_name}&' \
                                   'email={email}'.format(first_name=guest.first_name, last_name=guest.last_name,
                                                          email=guest.email)
         else:
@@ -82,6 +83,18 @@ class PingView(View):
         guest.save()
 
         return JsonResponse({'success': True, 'code': params['code']}, safe=False)
+
+
+class CompleteView(View):
+    def get(self,request, *args, **params):
+        data = security.decrypt(params['code'])
+
+        # Load Guest from security code
+        guest = get_object_or_404(models.Guest, code=data['user'])
+
+        success = Order(yurplan_id=request.GET['yurplan_id'], seats_count=int(request.GET['seats_count']), guest=guest).save()
+
+        return JsonResponse({'success': success, 'code': params['code']}, safe=False)
 
 
 class AvailableView(View):

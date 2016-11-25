@@ -11,6 +11,7 @@ var shop = {};
     const SHOP_FILLING_FORM = 'FILLING_FORM';
     const SHOP_PAYMENT = 'PAYMENT';
     const SHOP_SUCCESS = 'SUCCESS';
+    const SHOP_FAILURE = 'FAILURE';
 
     shop.state = SHOP_NOT_READY;
     shop.tickets = {};
@@ -57,6 +58,35 @@ var shop = {};
             // If user come back to the start state, go to not ready mode
             if($shop.find('.password_event').length>0 && shop.hasNotState([SHOP_NOT_READY, SHOP_LOGGING])) {
                 shop.state = SHOP_NOT_READY;
+            }
+
+            var $header = $shop.find('.widget-header');
+            if($header.length > 0) {
+                // We are on the last
+                if ($header.find('.active.last').length > 0 && shop.hasNotState([SHOP_SUCCESS, SHOP_FAILURE])) {
+                    if ($shop.find('.alert.alert-success').length > 0) {
+                        shop.state = SHOP_SUCCESS;
+                        // Handle a shop success
+                        var yurplan_id = $($shop.find('.alert.alert-success a')[0]).attr('href').split('?',2)[0];
+                        var count = _.reduce(_.values(shop.tickets), function(memo, num){ return memo + num; });
+                        $.get('/shop/complete/'+$iframe.data('auth')+
+                            '?yurplan_id='+encodeURIComponent(yurplan_id)+'&seats_count='+count, function (result) {
+                            console.log(result)
+                        })
+                    } else {
+                        shop.state = SHOP_FAILURE;
+                    }
+                    if($shop.find('.share').parent().parent().css('display')!='none')
+                        $shop.find('.share').parent().parent().hide();
+                }
+                if ($header.find('> div:nth-of-type(2)').hasClass('active')){
+                    shop.state = SHOP_FILLING_FORM;
+                }
+                if ($header.find('> div:nth-of-type(4)').length > 0){
+                    if ($header.find('> div:nth-of-type(3)').hasClass('active')){
+                        shop.state = SHOP_PAYMENT;
+                    }
+                }
             }
 
             // Listening loops by states
