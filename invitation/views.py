@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import SimpleTemplateResponse
 from django.utils import timezone
 from django.views import View
+from django.views.generic import FormView
 from django.views.generic import TemplateView
 
 from invitation import models
@@ -22,6 +23,7 @@ class ShopView(TemplateView):
     def get(self, request, *args, **params):
         # Load used data
         guest = get_object_or_404(models.Guest, code=params['code'])
+        request.session['user_code'] = params['code']
         context = dict()
 
         # Security code used for the config and ping api
@@ -109,3 +111,45 @@ class AvailableView(View):
                        (datetime.now() - guest.last_seen_at.replace(tzinfo=None)).seconds >= 15,
             'code': params['code']
         }, safe=False)
+
+
+class InviteView(FormView):
+    template_name = 'invitation/invite.html'
+    """
+    A view that renders a template.  This view will also pass into the context
+    any keyword arguments passed by the URLconf.
+    """
+    def get(self, request, *args, **params):
+        # Load used data
+        guest = get_object_or_404(models.Guest, code=params['code'])
+        request.session['user_code'] = params['code']
+        context = dict()
+
+        # Security code used for the config and ping api
+        security_code = security.encrypt({'time': time(), 'user': params['code']})
+
+        # Check and update last seen time
+        if guest.last_seen_at and (datetime.now() - guest.last_seen_at.replace(tzinfo=None)).seconds < 0:
+            # This user is probably logged we render a waiting template
+            return SimpleTemplateResponse('invitation/wait.html', {'code': security_code})
+
+        # Update last seen time
+        guest.last_seen_at = timezone.now()
+        guest.save()
+
+        # Determine reverse to use
+        if request.META['HTTP_HOST'] == 'gala.dev.bde-insa-lyon.fr:8000':
+            context['shop_url'] = 'http://yurplan.bde-insa-lyon.fr:8000/event/Lavage-Ecoflute/12752/tickets/widget?'\
+                                  'code=GG&default_culture=fr&firstname={first_name}&lastname={last_name}&' \
+                                  'email={email}'.format(first_name=guest.first_name, last_name=guest.last_name,
+                                                         email=guest.email)
+        else:
+            context['shop_url'] = 'https://yurplan.bde-insa-lyon.fr/event/Lavage-Ecoflute/12752/tickets/widget?' \
+                                  'from=widget&default_culture=fr&firstname={first_name}&lastname={last_name}&' \
+                                  'email={email}'.format(first_name=guest.first_name, last_name=guest.last_name,
+                                                         email=guest.email)
+
+        # Add security code to context
+        context['code'] = security_code
+
+        return self.render_to_response(context)

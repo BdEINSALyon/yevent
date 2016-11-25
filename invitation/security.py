@@ -11,7 +11,7 @@ def _cipher():
 
 
 def encrypt(data):
-    return base64.b64encode(_cipher().encrypt(json.dumps(data)))
+    return base64.b64encode(_cipher().encrypt(json.dumps(data))).decode("utf-8")
 
 
 def decrypt(data):

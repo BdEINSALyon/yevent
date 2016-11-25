@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^shop/config/(?P<code>[A-Za-z0-9+/=]*)$', views.ConfigView.as_view(), name='config'),
     url(r'^shop/available/(?P<code>[A-Za-z0-9+/=]*)$', views.AvailableView.as_view(), name='available'),
     url(r'^shop/ping/(?P<code>[A-Za-z0-9+/=]*)$', views.PingView.as_view(), name='ping'),
-    url(r'^shop/complete/(?P<code>[A-Za-z0-9+/=]*)$', views.CompleteView.as_view(), name='complete')
+    url(r'^shop/complete/(?P<code>[A-Za-z0-9+/=]*)$', views.CompleteView.as_view(), name='complete'),
+    url(r'^invite/(?P<code>[A-Za-z0-9+/=\-]*)$', views.InviteView.as_view(), name='invite')
 ]
