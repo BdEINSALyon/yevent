@@ -47,7 +47,7 @@ class Guest(models.Model):
             self.max_seats = self.type_max_seats()
 
     max_seats = models.IntegerField()
-    last_seen_at = models.DateTimeField(verbose_name='dernière visite', auto_created=True, null=True)
+    last_seen_at = models.DateTimeField(verbose_name='dernière visite', auto_created=True, blank=True, null=True)
 
     def available_seats(self):
         order_seats = self.orders.aggregate(count=Coalesce(Sum('seats_count'), 0)).get('count', 0)

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_forms_bootstrap',
+    'import_export',
     'invitation'
 ]
 
@@ -127,3 +128,5 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, "invitation/static")
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
