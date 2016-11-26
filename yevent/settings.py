@@ -15,18 +15,20 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import logging
 
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ohyav@yf+nx1wn-ygmfnmtyd%qf*h=c@6&c_l+sl$fv7babl+*'
+SECRET_KEY = getattr(os.environ, 'SECRET_KEY', 'ohyav@yf+nx1wn-ygmfnmtyd%qf*h=c@6&c_l+sl$fv7babl+*')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('PORT', None) is None
 
-ALLOWED_HOSTS = ['gala.dev.bde-insa-lyon.fr', 'billets.gala.bde-insa-lyon.fr', 'localhost']
+ALLOWED_HOSTS = ['gala.dev.bde-insa-lyon.fr', 'billets.gala.bde-insa-lyon.fr', getattr(os.environ, 'HOST', 'localhost')]
 
 # Application definition
 
@@ -77,12 +79,13 @@ TEMPLATES = [
 
 ANYMAIL = {
     # (exact settings here depend on your ESP...)
-    "MAILGUN_API_KEY": os.environ['MAILGUN_API_KEY'],
-    "MAILGUN_SENDER_DOMAIN": 'sandboxfbe8feabbcc44995a1bf0646a5e85a18.mailgun.org',  # your Mailgun domain, if needed
+    "MAILGUN_API_KEY": os.environ.get('MAILGUN_API_KEY', ''),
+    "MAILGUN_SENDER_DOMAIN":
+        os.environ.get('MAILGUN_SENDER_DOMAIN', 'sandboxfbe8feabbcc44995a1bf0646a5e85a18.mailgun.org'),  # your Mailgun domain, if needed
 }
 
 EMAIL_BACKEND = "anymail.backends.mailgun.MailgunBackend"
-DEFAULT_FROM_EMAIL = "you@example.com"
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_FROM', 'Gala INSA Lyon (DEV) <gala@bde-insa-lyon.fr>')
 
 WSGI_APPLICATION = 'yevent.wsgi.application'
 
@@ -93,10 +96,7 @@ PREMAILER_OPTIONS = dict(base_url='http://example.com',
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(default='sqlite:///{}'.format(os.path.join(BASE_DIR, "db.sqlite3")))
 }
 
 # Password validation
