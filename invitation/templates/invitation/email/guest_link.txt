@@ -1,0 +1,7 @@
+(Ce mail est disponible en format HTML)
+
+Bonjour {{guest.first_name}},
+
+Ton invitation à l'Espace Billetterie Diplômé est diponible, utilise le lien : {{ host }}/{% url 'shop' code=guest.code %}.
+
+L'équipe du Gala

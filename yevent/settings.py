@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import logging
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_forms_bootstrap',
     'import_export',
+    'django_premailer',
     'anymail',
     'invitation'
 ]
@@ -82,6 +85,9 @@ EMAIL_BACKEND = "anymail.backends.mailgun.MailgunBackend"
 DEFAULT_FROM_EMAIL = "you@example.com"
 
 WSGI_APPLICATION = 'yevent.wsgi.application'
+
+PREMAILER_OPTIONS = dict(base_url='http://example.com',
+                         remove_classes=False, cssutils_logging_level=logging.ERROR)
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases

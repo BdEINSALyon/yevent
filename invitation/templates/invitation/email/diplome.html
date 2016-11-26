@@ -1,0 +1,32 @@
+{% extends 'invitation/email/base.html' %}
+
+{% block placeholder %}{% endblock %}
+
+{% block content %}
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td>
+                <p>Salut {{ guest.first_name }},</p>
+                <p>Ton Gala arrive bientôt et l'espace billetterie des diplômés ouvre ses portes. Tu peux utiliser le lien ci-dessous pour y accéder.</p>
+                <p>Ce lien est personnel et te donne le droit d'acheter 1 à 8 places ou alors d'envoyer des invitations pour que ta famille, tes ami(e)s puissent achetez leur places.</p>
+                <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                    <tbody>
+                    <tr>
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                <tr>
+                                    <td><a href="{{ host }}{% url 'shop' code=guest.code %}" target="_blank">Accèder à la billetterie</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>Pour plus d'informations, n'hésite pas à visiter le site du Gala&nbsp;: <a href="http://gala.bde-insa-lyon.fr">http://gala.bde-insa-lyon.fr</a></p>
+                <p>&Agrave; bientôt au Gala INSA Lyon 2017 !</p>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

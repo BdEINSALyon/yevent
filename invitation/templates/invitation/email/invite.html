@@ -1,0 +1,32 @@
+{% extends 'invitation/email/base.html' %}
+
+{% block placeholder %}{% endblock %}
+
+{% block content %}
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td>
+                <p>Salut {{ guest.first_name }},</p>
+                <p>{{ guest.invited_by.first_name }} t'invite à venir à son Gala.</p>
+                <p>Ce lien te permet d'acheter {{ guest.max_seats }} place{{ guest.max_seats|pluralize }}.</p>
+                <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                    <tbody>
+                    <tr>
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                <tr>
+                                    <td><a href="{{ host }}{% url 'shop' code=guest.code %}" target="_blank">Accèder à la billetterie</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>Pour plus d'informations, n'hésite pas à visiter le site du Gala&nbsp;: <a href="http://gala.bde-insa-lyon.fr">http://gala.bde-insa-lyon.fr</a></p>
+                <p>&Agrave; bientôt au Gala INSA Lyon 2017 !</p>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

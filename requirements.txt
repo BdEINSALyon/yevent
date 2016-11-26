@@ -1,10 +1,15 @@
 chardet==2.3.0
+cssselect==1.0.0
+cssutils==1.0.1
 diff-match-patch==20121119
 Django==1.10.3
 django-anymail==0.6.1
 django-forms-bootstrap==3.0.1
 django-import-export==0.5.1
+django-premailer==0.2.0
+lxml==3.6.4
 Naked==0.1.31
+premailer==3.0.0
 pycrypto==2.6.1
 PyYAML==3.12
 requests==2.12.1
