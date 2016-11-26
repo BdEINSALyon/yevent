@@ -12,18 +12,24 @@
     <script>
         var code = "{{ code }}";
         $(function(){
+            var success = 0;
             function test() {
                 $.get('/shop/available/'+code, function (result) {
                     if(result.success){
-                        var next = '{{ next_url }}';
-                        if(window.location.href == next)
-                            window.location.reload();
-                        else
-                            window.location.href = next;
+                        success++;
+                        if(success>1) {
+                            var next = '{{ next_url }}';
+                            if (window.location.href == next)
+                                window.location.reload();
+                            else
+                                window.location.href = next;
+                        }
+                    } else {
+                        success=0;
                     }
                 });
             }
-            setInterval(test, 100);
+            setInterval(test, 5000);
         });
     </script>
 {% endblock %}

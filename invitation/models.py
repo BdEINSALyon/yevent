@@ -1,6 +1,10 @@
 # coding=utf-8
+import string
+from random import random
 from time import time
 
+from django.core import urlresolvers
+from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
@@ -59,6 +63,36 @@ class Guest(models.Model):
 
     def __str__(self):
         return "{} {}".format(self.first_name, self.last_name)
+
+    def generate_code(self):
+        if self.code == '' or self.code is None:
+            while True:
+                code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(40))
+                if Guest.objects.filter(code=code).count() < 1:
+                    break
+
+    def send_email(self):
+        msg = EmailMultiAlternatives(
+            subject="Gala INSA Lyon 2017",
+            body="Accedez à la boutique : {}".format(urlresolvers.reverse('shop', {'code': self.code})),
+            from_email="Example <admin@example.com>",
+            to=["New User <user1@example.com>", "account.manager@example.com"],
+            reply_to=["Helpdesk <support@example.com>"])
+
+        # Include an inline image in the html:
+        logo_cid = attach_inline_image_file(msg, "/path/to/logo.jpg")
+        html = """<img alt="Logo" src="cid:{logo_cid}">
+                  <p>Please <a href="http://example.com/activate">activate</a>
+                  your account</p>""".format(logo_cid=logo_cid)
+        msg.attach_alternative(html, "text/html")
+
+        # Optional Anymail extensions:
+        msg.metadata = {"user_id": "8675309", "experiment_variation": 1}
+        msg.tags = ["activation", "onboarding"]
+        msg.track_clicks = True
+
+        # Send it:
+        msg.send()
 
 
 class Type(models.Model):
