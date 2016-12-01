@@ -1,6 +1,8 @@
 from datetime import datetime
 from time import time
 
+from django.apps import config
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.response import SimpleTemplateResponse
@@ -42,7 +44,7 @@ class ShopView(TemplateView):
 
         # Check and update last seen time
         reject = try_to_reject(guest, request)
-        if reject is not None:
+        if reject is not None and not settings.DEBUG:
             return reject
 
         # Update last seen time

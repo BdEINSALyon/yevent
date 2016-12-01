@@ -99,7 +99,7 @@ var shop = {};
                             }
                         });
                         $shop.find('input[name=password]').val('bdeinsa');
-                        $shop.find('input[type=submit]').click();
+                        $shop.find('input[type=submit]').closest("form").submit();
                     } else if($shop.find('.ticket-event').length>0) {
                         shop.state = SHOP_SELECTING_PRODUCTS;
                     }

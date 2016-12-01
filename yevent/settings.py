@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'import_export',
     'django_premailer',
     'anymail',
+    'legal',
     'invitation'
 ]
 

@@ -1,7 +1,76 @@
-body > .container:first-of-type {
-    margin-top: 5em;
+body {
+    font-family: 'Source Sans Pro R', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
-#invite-form .form-group{
+body > .container:first-of-type {
+    margin-top: 2em;
+}
+
+#invite-form .form-group {
     min-height: 2.45em;
+}
+
+#header {
+    padding: 0;
+    position: relative;
+    z-index: 9999;
+    box-shadow: 3px 0 2px rgba(0, 0, 0, 0.5);
+    height: 85px;
+    background-color: white;
+}
+
+#header .navbar-brand img {
+    margin-top: 10px;
+}
+
+#header .navbar-nav:first-of-type {
+    margin-left: 6em;
+    float: right;
+}
+
+#header .navbar-nav > li > a {
+    height: 85px;
+    line-height: 55px;
+}
+
+#header .navbar-nav > .active > a {
+    background-color: #52bdb6;
+    color: #FFFFFF;
+}
+
+#header .navbar-nav > li > a:hover {
+    background-color: #e8485b;
+    color: #FFFFFF;
+}
+
+* {
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+.page-wrapper:first-of-type {
+    padding-bottom: 2em;
+    min-height: 100%;
+    /* equal to footer height */
+    margin-bottom: -50px;
+}
+
+.page-wrapper:first-of-type:after {
+    content: "";
+    display: block;
+}
+
+footer, .page-wrapper:first-of-type:after {
+    height: 50px;
+}
+
+footer {
+    background: #1d1f21;
+    color: #FFF;
+    text-align: center;
+    padding-top: 0.8em;
+
 }
