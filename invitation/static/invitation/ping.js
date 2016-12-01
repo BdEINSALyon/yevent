@@ -4,9 +4,11 @@
 var AUTH_TOKEN = AUTH_TOKEN || '';
 $(function(){
     document.domain = 'bde-insa-lyon.fr';
+    var ping = true;
 
     setInterval(function () {
-        $.get('/ping');
+        if(ping)
+            $.get('/ping');
     }, 1000);
 
     $('a').click(function () {
@@ -16,14 +18,16 @@ $(function(){
         });
         return false;
     });
-    $(window).on('unload', function () {
-        console.log('Unload!');
+    $(window).bind('beforeunload', function(){
+        ping = false;
         $.ajax({
             type: 'GET',
             async: false,
             url: '/halt'
         }, function () {
-            console.log('Halted')
+            setTimeout(function () {
+                ping = true;
+            },1500);
         });
     });
 
