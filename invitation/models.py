@@ -71,29 +71,6 @@ class Guest(models.Model):
                 if Guest.objects.filter(code=code).count() < 1:
                     break
 
-    def send_email(self):
-        msg = EmailMultiAlternatives(
-            subject="Gala INSA Lyon 2017",
-            body="Accedez à la boutique : {}".format(urlresolvers.reverse('shop', {'code': self.code})),
-            from_email="Example <admin@example.com>",
-            to=["New User <user1@example.com>", "account.manager@example.com"],
-            reply_to=["Helpdesk <support@example.com>"])
-
-        # Include an inline image in the html:
-        logo_cid = attach_inline_image_file(msg, "/path/to/logo.jpg")
-        html = """<img alt="Logo" src="cid:{logo_cid}">
-                  <p>Please <a href="http://example.com/activate">activate</a>
-                  your account</p>""".format(logo_cid=logo_cid)
-        msg.attach_alternative(html, "text/html")
-
-        # Optional Anymail extensions:
-        msg.metadata = {"user_id": "8675309", "experiment_variation": 1}
-        msg.tags = ["activation", "onboarding"]
-        msg.track_clicks = True
-
-        # Send it:
-        msg.send()
-
 
 class Type(models.Model):
     class Meta:
@@ -104,17 +81,3 @@ class Type(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Order(models.Model):
-    class Meta:
-        verbose_name = 'commande'
-
-    yurplan_id = models.CharField(max_length=100, verbose_name='ID Yurplan')
-    seats_count = models.IntegerField(verbose_name='nombre de places')
-    guest = models.ForeignKey(
-        'Guest',
-        null=False,
-        blank=False,
-        related_name='orders'
-    )

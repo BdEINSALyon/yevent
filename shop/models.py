@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from django.db import models
+from invitation.models import Guest
 
 
 class Order(models.Model):
@@ -13,9 +14,10 @@ class Order(models.Model):
         ('WAITING_PAYMENT', 'En attente du paiement'),
         ('PAID', 'Payé'),
     )
-    status = models.CharField(verbose_name='statut', choices=STATUSES)
+    status = models.CharField(max_length=15, verbose_name='statut', choices=STATUSES)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True, auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    guest = models.ForeignKey('invitation.Guest', related_name='orders', verbose_name='Invité')
     promotion = models.ForeignKey(
         'PromoCode',
         null=True,

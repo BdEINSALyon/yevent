@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
 from invitation import email
-from .models import Guest, Order, Type
+from .models import Guest, Type
 
 
 @admin.register(Guest)
@@ -21,11 +21,6 @@ class GuestAdmin(ImportExportModelAdmin):
         self.message_user(request, "{} email(s) envoyé à {} personne(s)".format(count, queryset.count()))
 
     send_email.short_description = "Envoyer le mail d'invitation"
-
-
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    pass
 
 
 @admin.register(Type)

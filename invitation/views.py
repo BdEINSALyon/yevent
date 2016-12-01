@@ -15,7 +15,7 @@ from django.views.generic.edit import BaseFormView
 from invitation import forms
 from invitation import models
 from invitation import security
-from invitation.models import Order
+from shop.models import Order
 
 
 def try_to_reject(guest, request):
