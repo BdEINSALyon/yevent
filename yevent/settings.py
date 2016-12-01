@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django_premailer',
     'anymail',
     'legal',
-    'invitation'
+    'invitation',
+    'ticketing',
+    'shop'
 ]
 
 MIDDLEWARE = [
