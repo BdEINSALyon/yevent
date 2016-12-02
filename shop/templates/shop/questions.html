@@ -4,6 +4,7 @@
 {% block cart_content %}
 
     <div class="row">
+    <form method="post">
         {% for ticket in order.tickets.all %}
             <div class="col-md-12">
                 <h1>Billet {{ forloop.counter }} - {{ ticket.price.name }}</h1>
@@ -76,6 +77,9 @@
                 </div>
             </div>
         {% endfor %}
+        {% csrf_token %}
+        <button class="btn btn-primary btn-block">Valider</button>
+    </form>
     </div>
 
 {% endblock %}

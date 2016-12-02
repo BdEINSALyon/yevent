@@ -5,15 +5,7 @@
 var shop = {};
 
 (function (shop) {
-    const SHOP_NOT_READY = 'NOT_READY';
-    const SHOP_LOGGING = 'LOGGING';
-    const SHOP_SELECTING_PRODUCTS = 'SELECTING_PRODUCTS';
-    const SHOP_FILLING_FORM = 'FILLING_FORM';
-    const SHOP_PAYMENT = 'PAYMENT';
-    const SHOP_SUCCESS = 'SUCCESS';
-    const SHOP_FAILURE = 'FAILURE';
 
-    shop.state = SHOP_NOT_READY;
     shop.tickets = {};
     shop.guest = {};
     shop.registerState = function (state) {
