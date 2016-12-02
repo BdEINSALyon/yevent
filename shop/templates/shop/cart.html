@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load active_header %}
+{% load static %}
+
+{% block title %}Billetterie{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" id="cart" data-auth="{{ guest }}">
+            <div class="col-md-12">
+                <div class="row" id="cart_header">
+                    <div class="col-sm-3 {% active_header request 'ongoing' %}">
+                        Sélection
+                    </div>
+                    <div class="col-sm-3 {% active_header request 'questions' %}">
+                        Questions
+                    </div>
+                    <div class="col-sm-3 {% active_header request 'payment' %}">
+                        Paiement
+                    </div>
+                    <div class="col-sm-3 {% active_header request 'paid' %}">
+                        Confirmation
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" id="cart_content">
+                {% block cart_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}<script src="{% static 'shop/js/shop.js' %}"></script>{% endblock %}

@@ -1,0 +1,26 @@
+#cart {
+  #cart_header {
+    text-align: center;
+    font-weight: bold;
+
+    > div {
+      border-bottom: 3px solid #52bdb6;
+      margin: 2.5%;
+      padding: 0.2em;
+      width: 20%;
+    }
+
+    > .active{
+      border-bottom: 3px solid #e8485b;
+    }
+  }
+
+  #price_select {
+    th:first-of-type, td:first-of-type{
+      text-align: left;
+    }
+    th, td{
+      text-align: center;
+    }
+  }
+}

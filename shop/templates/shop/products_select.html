@@ -1,0 +1,43 @@
+{% extends 'shop/cart.html' %}
+
+{% block cart_content %}
+    <form method="post">
+        {% csrf_token %}
+        <table class="table" id="price_select">
+            <thead>
+            <tr>
+                <th class="col-md-7">Produit</th>
+                <th class="col-md-3">Prix Unitaire</th>
+                <th class="col-md-2">Quantité</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for price in prices %}
+                <tr>
+                    <td>{{ price.name }}</td>
+                    <td>{{ price.price|floatformat:2 }} €</td>
+                    <td>
+                        <select title="Quantité" class="seats" name="amount[{{ price.id }}]" data-id="{{ price.id }}" data-price="{{ price.price }}">
+                            {% for amount in allowed_amounts %}
+                                <option value="{{ amount }}">{{ amount }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td><b>Total (TTC)</b></td>
+                    <td id="total">0,00€</td>
+                </tr>
+            </tfoot>
+        </table>
+    <div class="row" id="order_button" style="display: none">
+        <div class="col-md-offset-7 col-md-5">
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Commander</button>
+        </div>
+    </div>
+    </form>
+{% endblock %}

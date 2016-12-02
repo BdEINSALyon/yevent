@@ -16,5 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
+from ticketing import api
+
 urlpatterns = [
+    url(r'^prices.json$', api.prices, name='ticketing.api.prices')
 ]

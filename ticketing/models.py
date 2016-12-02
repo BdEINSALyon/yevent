@@ -38,6 +38,15 @@ class Price(Saleable):
     allowed_options = models.ManyToManyField('OptionPrice', related_name='allowed_prices',
                                              verbose_name='options', blank=True)
 
+    def to_object(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'price': self.price,
+            'vat': self.vat,
+            'description': self.description
+        }
+
 
 class OptionPrice(Saleable):
     class Meta:

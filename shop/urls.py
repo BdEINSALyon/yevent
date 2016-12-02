@@ -16,5 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
+from shop import views
+
 urlpatterns = [
+    url(r'^ongoing$', views.CartSelectionView.as_view(), name='shop.ongoing'),
+    url(r'^questions$', views.CartSelectionView.as_view(), name='shop.questions'),
+    url(r'^payment$', views.CartSelectionView.as_view(), name='shop.payment'),
+    url(r'^confirmation$', views.CartSelectionView.as_view(), name='shop.confirmation'),
 ]

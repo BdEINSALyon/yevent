@@ -4,7 +4,7 @@ from time import time
 from django.apps import config
 from django.conf import settings
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.template.response import SimpleTemplateResponse
 from django.utils import timezone
 from django.views import View
@@ -15,6 +15,7 @@ from django.views.generic.edit import BaseFormView
 from invitation import forms
 from invitation import models
 from invitation import security
+from invitation import session
 from shop.models import Order
 
 
@@ -51,32 +52,15 @@ class ShopView(TemplateView):
         guest.last_seen_at = timezone.now()
         guest.save()
 
-        # Determine reverse to use
-        if request.META['HTTP_HOST'] == 'gala.dev.bde-insa-lyon.fr:8000':
-            context['shop_url'] = 'http://yurplan.bde-insa-lyon.fr:8000/event/Lavage-Ecoflute/12752/tickets/widget?' \
-                                  'code=GG&default_culture=fr&firstname={first_name}&lastname={last_name}&' \
-                                  'email={email}'.format(first_name=guest.first_name, last_name=guest.last_name,
-                                                         email=guest.email)
-        else:
-            context['shop_url'] = 'https://yurplan.bde-insa-lyon.fr/event/Lavage-Ecoflute/12752/tickets/widget?' \
-                                  'from=widget&default_culture=fr&firstname={first_name}&lastname={last_name}&' \
-                                  'email={email}'.format(first_name=guest.first_name, last_name=guest.last_name,
-                                                         email=guest.email)
+        session.set_guest(request, guest)
 
-        # Add security code to context
-        context['code'] = security_code
-        context['guest'] = guest
-
-        # Inject limit seats to context
-        context['seats_left'] = guest.available_seats()
-
-        return self.render_to_response(context)
+        return redirect('shop.ongoing')
 
 
 class ConfigView(View):
     def get(self, request, *args, **params):
         data = security.decrypt(params['code'])
-        guest = get_object_or_404(models.Guest, code=data['user'])
+        guest = get_object_or_404(models.Guest, id=data['id'])
         return JsonResponse({
             'first_name': guest.first_name,
             'last_name': guest.last_name,

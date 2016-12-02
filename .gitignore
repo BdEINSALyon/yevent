@@ -1,4 +1,5 @@
-
+shop/static/shop/css/*.css
+shop/static/shop/css/*.css.map
 static_root
 
 # Created by https://www.gitignore.io/api/django,pycharm,python
