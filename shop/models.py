@@ -25,6 +25,9 @@ class Order(models.Model):
         related_name='orders'
     )
 
+    def bill_price(self):
+        return sum(ticket.bill_price() for ticket in self.tickets.all())
+
 
 class PromoCode(models.Model):
     class Meta:

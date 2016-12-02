@@ -130,3 +130,45 @@ class CartQuestionView(CartView):
             'state': 'QUESTIONS'
         }
         return self.render_to_response(context)
+
+
+class CartPaymentView(CartView):
+    template_name = 'shop/payment.html'
+    status = 'PAYMENT'
+
+    # noinspection PyMethodMayBeStatic
+    def post(self, request):
+
+        order = self.order(request)
+
+        error = True
+
+        if not error:
+            order.status = 'PAID'
+            order.save()
+        else:
+            messages.error(request, "Le paiement a été refusé.")
+
+        return redirect('shop.questions')
+
+    def get(self, request, *args, **kwargs):
+        order = self.order(request)
+        context = {
+            'order': order,
+            'state': 'PAYMENT'
+        }
+        return self.render_to_response(context)
+
+
+class CartPaidView(CartView):
+    template_name = 'shop/success.html'
+    status = 'PAID'
+
+    def get(self, request, *args, **kwargs):
+        guest = get_guest(request)
+        order = guest.orders.filter(status='QUESTIONS').last()
+        context = {
+            'order': order,
+            'state': 'PAYMENT'
+        }
+        return self.render_to_response(context)

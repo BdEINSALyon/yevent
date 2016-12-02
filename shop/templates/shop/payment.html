@@ -1,0 +1,94 @@
+{% extends 'shop/cart.html' %}
+{% load question_layout %}
+
+{% block cart_content %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Résumé</h3>
+            <ul class="list-group">
+                {% for ticket in order.tickets.all %}
+                    <li class="list-group-item">
+                        <span class="badge badge-default">{{ ticket.bill_price|floatformat:2 }} €</span>
+                        <b>{{ ticket.price.name }}</b>
+                        {% if ticket.has_options %}
+                            <div style="padding-left: 1em">
+                                {% for selection in ticket.option_selection.all %}
+                                    {{ selection.seats }}x {{ selection.option.name }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                <li class="list-group-item text-center">
+                    <h4>Total (TTC) : {{ order.bill_price|floatformat:2 }} €</h4>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <h3>Formulaire de paiement</h3>
+            <form method="post">
+
+                <div class="panel panel-success">
+                    <div class="panel-heading panel-success text-center">
+                        <h4>
+                            <i class="glyphicon glyphicon-lock"></i>
+                            Ce formulaire est sécurisé et chiffré grâce à un certificat SSL
+                        </h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="number">Numéro de la carte
+                                        <small>(Ce sont les 16 chiffres principaux de la carte)</small>
+                                    </label>
+                                    <input type="text" size="20" data-stripe="number" id="number" class="form-control"
+                                           aria-describedby="number">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="number">Expiration
+                                        <small>(MM/AA)</small>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" maxlength="2" size="2" data-stripe="exp_month" id="exp_month"
+                                               class="form-control" aria-describedby="number" title="mois d'expiration">
+                                        <span class="input-group-addon" id="sizing-addon2">/</span>
+                                        <input type="text"
+                                              size="2"
+                                               maxlength="2"
+                                              data-stripe="exp_year"
+                                              id="exp_year"
+                                              class="form-control"
+                                              aria-describedby="number" title="année d'expiration">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="cvc">CVC
+                                        <small>(3 derniers chiffres au dos de la carte)</small>
+                                    </label>
+                                    <input type="text" size="4" data-stripe="cvc" id="cvc" class="form-control"
+                                           aria-describedby="cvc">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="pull-left"><h4 >Votre carte sera débité de {{ order.bill_price|floatformat:2 }} €</h4></div>
+                        <button class="btn btn-primary btn-lg pull-right">Valider</button>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                {% csrf_token %}
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}

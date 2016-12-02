@@ -21,6 +21,6 @@ from shop import views
 urlpatterns = [
     url(r'^ongoing$', views.CartSelectionView.as_view(), name='shop.ongoing'),
     url(r'^questions$', views.CartQuestionView.as_view(), name='shop.questions'),
-    url(r'^payment$', views.CartSelectionView.as_view(), name='shop.payment'),
-    url(r'^confirmation$', views.CartSelectionView.as_view(), name='shop.confirmation'),
+    url(r'^payment$', views.CartPaymentView.as_view(), name='shop.payment'),
+    url(r'^paid', views.CartPaidView.as_view(), name='shop.paid'),
 ]

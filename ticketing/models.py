@@ -1,6 +1,9 @@
 # coding=utf-8
 
 from django.db import models
+from django.db.models import F
+from django.db.models import Sum
+
 from questions.models import Answer, Question
 
 
@@ -14,9 +17,16 @@ class Ticket(models.Model):
     answers = models.ManyToManyField('questions.Answer', related_name='tickets', verbose_name='réponses', blank=True)
     order = models.ForeignKey('shop.Order', related_name='tickets', verbose_name='commande')
 
+    def has_options(self):
+        return self.option_selection.aggregate(number=Sum(F('seats')))['number'] > 0
+
+    def bill_price(self):
+        return self.price.price + self.option_selection.aggregate(price=Sum(F('seats')*F('option__price')))['price']
+
 
 class OptionSelection(models.Model):
     class Meta:
+        verbose_name = "achat d'option"
         verbose_name = "achat d'option"
 
     ticket = models.ForeignKey('Ticket', related_name='option_selection')
