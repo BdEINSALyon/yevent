@@ -23,6 +23,9 @@ class Ticket(models.Model):
     def bill_price(self):
         return self.price.price + self.option_selection.aggregate(price=Sum(F('seats')*F('option__price')))['price']
 
+    def gid(self):
+        return "G{}O{}T{}".format(self.order.guest.id, self.order.id, self.id)
+
 
 class OptionSelection(models.Model):
     class Meta:

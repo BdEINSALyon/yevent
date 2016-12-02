@@ -17,7 +17,9 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from ticketing import api
+from ticketing import tickets
 
 urlpatterns = [
-    url(r'^prices.json$', api.prices, name='ticketing.api.prices')
+    url(r'^prices.json$', api.prices, name='ticketing.api.prices'),
+    url(r'^ticket/(?P<code>[A-Za-z0-9+/=]*)/ticket.pdf$', tickets.print, name='ticketing.ticket')
 ]

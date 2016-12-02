@@ -11,7 +11,7 @@ from stripe.error import StripeError
 from invitation import session
 from invitation.session import get_guest
 from questions.models import Answer
-from shop.models import Order
+from shop.models import Order, Payment
 from ticketing.models import Price, Ticket, OptionSelection
 
 
@@ -167,6 +167,10 @@ class CartPaymentView(CartView):
                 currency="eur",
                 customer=customer.id
             )
+
+            payment = Payment(method='STR', reference=charge.id, order=order, amount=charge.amount/100.0)
+            payment.save()
+
             error = False
         except StripeError:
             error = True
@@ -195,7 +199,7 @@ class CartPaidView(CartView):
     def dispatch(self, request, *args, **kwargs):
         if self.order(request) is None and self.status != 'ONGOING':
             return redirect('shop.ongoing')
-        return super().dispatch(request, *args, **kwargs)
+        return TemplateView.dispatch(self, request, *args, **kwargs)
 
     def order(self, request):
         return CartView.guest(request).orders.filter(status=self.status, updated_at__gte=date.today()-timedelta(hours=5)).last()

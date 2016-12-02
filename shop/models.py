@@ -29,6 +29,21 @@ class Order(models.Model):
         return sum(ticket.bill_price() for ticket in self.tickets.all())
 
 
+class Payment(models.Model):
+    class Meta:
+        verbose_name = 'paiement'
+    METHOD = (
+        ('CB', 'Carte bancaire'), ('ESP', 'Espèces'), ('CHQ', 'Chèque'), ('VIR', 'Virement'), ('STR', 'Stripe')
+    )
+    method = models.CharField(max_length=4, verbose_name='moyen de paiement', choices=METHOD, default='CB')
+    reference = models.CharField(max_length=255, verbose_name='référence', default='', blank=True)
+    refunded = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    amount = models.FloatField(default=0.0)
+    order = models.ForeignKey('Order', related_name='payments')
+
+
 class PromoCode(models.Model):
     class Meta:
         verbose_name = 'code de réduction'
