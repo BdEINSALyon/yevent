@@ -117,6 +117,8 @@ class CartQuestionView(CartView):
         if not error:
             order.status = 'PAYMENT'
             order.save()
+        else:
+            messages.error(request, "Le formulaire contient des erreurs, veuillez réessayer.")
 
         return redirect('shop.questions')
 

@@ -16,6 +16,7 @@ import os
 import logging
 
 import dj_database_url
+from django.contrib import messages
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -120,6 +121,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
