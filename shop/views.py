@@ -7,8 +7,9 @@ from django.views.generic import TemplateView
 
 from invitation import session
 from invitation.session import get_guest
+from questions.models import Answer
 from shop.models import Order
-from ticketing.models import Price, Ticket
+from ticketing.models import Price, Ticket, OptionSelection
 
 
 def _has_waiting_order_not_in(request, status=''):
@@ -88,6 +89,34 @@ class CartQuestionView(CartView):
     def post(self, request):
 
         order = self.order(request)
+
+        error = False
+
+        for ticket in order.tickets.all():
+            post_key = 'ticket_{}_'.format(ticket.id)
+            ticket.first_name = request.POST['{}first_name'.format(post_key)]
+            ticket.last_name = request.POST['{}last_name'.format(post_key)]
+
+            if ticket.first_name == '' or ticket.last_name == '':
+                error = True
+
+            for question in ticket.price.required_questions.all():
+                q_post_key = '{}answer_for_{}'.format(post_key, question.id)
+                answer = Answer(question=question, data=request.POST.get(q_post_key, ''))
+                answer.save()
+                ticket.answers.add(answer)
+
+            for option in ticket.price.allowed_options.all():
+                desired = int(request.POST.get('{}option_{}'.format(post_key, option.id), '0'))
+                selection = OptionSelection.objects.get_or_create(ticket=ticket, option=option)
+                selection[0].seats = desired
+                selection[0].save()
+
+            ticket.save()
+
+        if not error:
+            order.status = 'PAYMENT'
+            order.save()
 
         return redirect('shop.questions')
 

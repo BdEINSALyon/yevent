@@ -10,7 +10,6 @@ class Question(models.Model):
     TYPES = (
         ('T', 'Champ'),
         ('Z', 'Zone libre'),
-        ('C', 'Case à cocher'),
         ('R', 'Boutton radio'),
     )
 
@@ -29,6 +28,3 @@ class Answer(models.Model):
 
     data = models.TextField(blank=True)
     question = models.ForeignKey('Question', related_name='réponses')
-
-    def __str__(self):
-        return self.name

@@ -11,9 +11,17 @@ class Ticket(models.Model):
     last_name = models.CharField(max_length=255, blank=True)
     email = models.EmailField(blank=True, null=True)
     price = models.ForeignKey('Price', related_name='tickets', verbose_name='tarif')
-    options = models.ManyToManyField('OptionPrice', related_name='tickets', verbose_name='tarif', blank=True)
     answers = models.ManyToManyField('questions.Answer', related_name='tickets', verbose_name='réponses', blank=True)
     order = models.ForeignKey('shop.Order', related_name='tickets', verbose_name='commande')
+
+
+class OptionSelection(models.Model):
+    class Meta:
+        verbose_name = "achat d'option"
+
+    ticket = models.ForeignKey('Ticket', related_name='option_selection')
+    option = models.ForeignKey('OptionPrice', related_name='selection')
+    seats = models.IntegerField(verbose_name='nombre', default=0)
 
 
 class Saleable(models.Model):
