@@ -35,10 +35,10 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="{% active_page request 'shop' %}"><a
+                    <li class="{% active_page request '/shop' %}"><a
                             href="{% url 'shop' code=user_code %}">Billetterie</a>
                     </li>
-                    <li class="{% active_page request 'invite' %}"><a
+                    <li class="{% active_page request '/invitation' %}"><a
                             href="{% url 'invite' code=user_code %}">Invitations</a></li>
                 </ul>
             </div>

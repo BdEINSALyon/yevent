@@ -17,7 +17,7 @@
                     <td>{{ price.name }}</td>
                     <td>{{ price.price|floatformat:2 }} €</td>
                     <td>
-                        <select title="Quantité" class="seats" name="amount[{{ price.id }}]" data-id="{{ price.id }}" data-price="{{ price.price }}">
+                        <select title="Quantité" class="seats" name="seats_{{ price.id }}" data-id="{{ price.id }}" data-price="{{ price.price }}">
                             {% for amount in allowed_amounts %}
                                 <option value="{{ amount }}">{{ amount }}</option>
                             {% endfor %}

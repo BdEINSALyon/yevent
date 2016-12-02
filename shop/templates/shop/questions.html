@@ -1,0 +1,39 @@
+{% extends 'shop/cart.html' %}
+{% load question_layout %}
+
+{% block cart_content %}
+
+    <div class="row">
+        {% for ticket in order.tickets.all %}
+            <div class="col-md-12">
+                <h3>Billet {{ forloop.counter }} - {{ ticket.price.name }}</h3>
+                <div class="form-group">
+                    <label for="ticket_{{ ticket.id }}_first_name">Prénom</label>
+                    <input type="text"
+                           class="form-control"
+                           id="ticket_{{ ticket.id }}_first_name"
+                           name="ticket_{{ ticket.id }}_first_name"
+                           placeholder="Prénom">
+
+                </div>
+                <div class="form-group">
+                    <label for="ticket_{{ ticket.id }}_last_name">Nom</label>
+                    <input type="text"
+                           class="form-control"
+                           id="ticket_{{ ticket.id }}_last_name"
+                           name="ticket_{{ ticket.id }}_last_name"
+                           placeholder="Nom">
+                </div>
+                {% for question in ticket.price.required_questions.all %}
+
+                    <div class="form-group">
+                        <label for="ticket_{{ ticket.id }}_answer_for_{{ question.id }}">{{ question.question }}</label>
+                        {% question_layout ticket question %}
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

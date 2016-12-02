@@ -1,0 +1,11 @@
+{% for choice in data %}
+    <div class="radio">
+        <label>
+            <input
+                    type="radio"
+                    id="ticket_{{ ticket.id }}_answer_for_{{ question.id }}"
+                    name="ticket_{{ ticket.id }}_answer_for_{{ question.id }}"
+                    value="{{ choice }}"> {{ choice }}
+        </label>
+    </div>
+{% endfor %}

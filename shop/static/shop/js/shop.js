@@ -45,7 +45,7 @@ var shop = {};
           evt.preventDefault();
         }, false);
 
-        function refresh(){
+        function refreshSeats(){
 
             // Store all current value for tickets numbers
             $shop.find('select.seats').each(function () {
@@ -88,7 +88,8 @@ var shop = {};
 
         }
 
-        setInterval(refresh, 250);
+        if($shop.find('select.seats').length > 0)
+            setInterval(refreshSeats, 250);
 
     });
 

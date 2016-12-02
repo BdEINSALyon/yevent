@@ -7,12 +7,13 @@ from questions.models import Answer, Question
 class Ticket(models.Model):
     class Meta:
         verbose_name = 'billet'
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255, blank=True)
+    last_name = models.CharField(max_length=255, blank=True)
     email = models.EmailField(blank=True, null=True)
     price = models.ForeignKey('Price', related_name='tickets', verbose_name='tarif')
-    options = models.ManyToManyField('OptionPrice', related_name='tickets', verbose_name='tarif')
-    answers = models.ManyToManyField('questions.Answer', related_name='tickets', verbose_name='réponses')
+    options = models.ManyToManyField('OptionPrice', related_name='tickets', verbose_name='tarif', blank=True)
+    answers = models.ManyToManyField('questions.Answer', related_name='tickets', verbose_name='réponses', blank=True)
+    order = models.ForeignKey('shop.Order', related_name='tickets', verbose_name='commande')
 
 
 class Saleable(models.Model):
