@@ -23,4 +23,5 @@ requests==2.12.1
 rjsmin==1.0.12
 shellescape==3.4.1
 six==1.10.0
+stripe==1.43.0
 tablib==0.11.2

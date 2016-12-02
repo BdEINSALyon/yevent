@@ -1,9 +1,12 @@
 import itertools
 
+import stripe
+from datetime import timedelta, date
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
+from stripe.error import StripeError
 
 from invitation import session
 from invitation.session import get_guest
@@ -19,7 +22,7 @@ def _has_waiting_order_not_in(request, status=''):
 
 def _redirect_to_not_in(request, status=''):
     guest = get_guest(request)
-    return redirect('shop.{}'.format(guest.orders.filter(~Q(status=['PAID', status])).first().status.lower()))
+    return redirect('shop.{}'.format(guest.orders.filter(~Q(status__in=['PAID', status])).first().status.lower()))
 
 
 class CartView(TemplateView):
@@ -43,6 +46,12 @@ class CartView(TemplateView):
 class CartSelectionView(CartView):
     status = 'ONGOING'
     template_name = 'shop/products_select.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.guest(request).orders.filter(~Q(status__in=['PAID', 'ONGOING'])).delete()
+        if self.order(request) is not None:
+            return redirect('shop.ongoing')
+        return super().dispatch(request, *args, **kwargs)
 
     # noinspection PyMethodMayBeStatic
     def post(self, request):
@@ -141,15 +150,34 @@ class CartPaymentView(CartView):
 
         order = self.order(request)
 
-        error = True
+        # Get the credit card details submitted by the form
+        token = request.POST['stripeToken']
+
+        # Create a Customer
+        customer = stripe.Customer.create(
+            source=token,
+            description=order.guest.first_name+' '+order.guest.last_name,
+            email=order.guest.email
+        )
+
+        # Charge the Customer instead of the card
+        try:
+            charge = stripe.Charge.create(
+                amount=int(order.bill_price() * 100),  # in cents
+                currency="eur",
+                customer=customer.id
+            )
+            error = False
+        except StripeError:
+            error = True
 
         if not error:
             order.status = 'PAID'
             order.save()
+            return redirect('shop.paid')
         else:
             messages.error(request, "Le paiement a été refusé.")
-
-        return redirect('shop.questions')
+            return redirect('shop.payment')
 
     def get(self, request, *args, **kwargs):
         order = self.order(request)
@@ -163,6 +191,14 @@ class CartPaymentView(CartView):
 class CartPaidView(CartView):
     template_name = 'shop/success.html'
     status = 'PAID'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.order(request) is None and self.status != 'ONGOING':
+            return redirect('shop.ongoing')
+        return super().dispatch(request, *args, **kwargs)
+
+    def order(self, request):
+        return CartView.guest(request).orders.filter(status=self.status, updated_at__gte=date.today()-timedelta(hours=5)).last()
 
     def get(self, request, *args, **kwargs):
         guest = get_guest(request)

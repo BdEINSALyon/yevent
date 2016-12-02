@@ -27,7 +27,6 @@ class Ticket(models.Model):
 class OptionSelection(models.Model):
     class Meta:
         verbose_name = "achat d'option"
-        verbose_name = "achat d'option"
 
     ticket = models.ForeignKey('Ticket', related_name='option_selection')
     option = models.ForeignKey('OptionPrice', related_name='selection')

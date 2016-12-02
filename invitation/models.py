@@ -54,7 +54,7 @@ class Guest(models.Model):
     last_seen_at = models.DateTimeField(verbose_name='dernière visite', auto_created=True, blank=True, null=True)
 
     def available_seats(self):
-        order_seats = sum(order.tickets.count() for order in Guest.objects.first().orders.all())
+        order_seats = sum(order.tickets.count() for order in self.orders.all())
         guests_count = self.guests.aggregate(count=Coalesce(Sum('max_seats'), 0)).get('count', 0)
         return self.max_seats - order_seats - guests_count
 
