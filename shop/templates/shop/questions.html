@@ -6,7 +6,7 @@
     <div class="row">
         {% for ticket in order.tickets.all %}
             <div class="col-md-12">
-                <h3>Billet {{ forloop.counter }} - {{ ticket.price.name }}</h3>
+                <h1>Billet {{ forloop.counter }} - {{ ticket.price.name }}</h1>
                 <div class="form-group">
                     <label for="ticket_{{ ticket.id }}_first_name">Prénom</label>
                     <input type="text"
@@ -24,14 +24,56 @@
                            name="ticket_{{ ticket.id }}_last_name"
                            placeholder="Nom">
                 </div>
-                {% for question in ticket.price.required_questions.all %}
 
+                {% for question in ticket.price.required_questions.all %}
                     <div class="form-group">
                         <label for="ticket_{{ ticket.id }}_answer_for_{{ question.id }}">{{ question.question }}</label>
                         {% question_layout ticket question %}
                     </div>
                 {% endfor %}
+                <h3>Options du billet</h3>
+                <div class="options">
+                    {% for option in ticket.price.allowed_options.all %}
+                        {% if option.multiple %}
+                            <div class="row form-group">
+                                <div class="col-md-2">
+                                    <select class="form-control option"
+                                            name="ticket_{{ ticket.id }}_option_{{ option.id }}"
+                                            id="ticket_{{ ticket.id }}_option_{{ option.id }}"
+                                            title="{{ option.name }}"
+                                            data-price="{{ option.price }}">
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-10">
+                                    {{ option.name }} (+{{ option.price|floatformat:2 }} € / article)
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="row form-group">
+                                <div class="col-md-2">
+                                    <select class="form-control option"
+                                            name="ticket_{{ ticket.id }}_option_{{ option.id }}"
+                                            id="ticket_{{ ticket.id }}_option_{{ option.id }}"
+                                            title="{{ option.name }}"
+                                            data-price="{{ option.price }}">
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                    </select></div>
 
+                                <div class="col-md-10">
+                                    {{ option.name }} (+{{ option.price|floatformat:2 }} €)
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="options_total text-right" data-initial="{{ ticket.price.price }}"><b>Prix du billet avec les options :</b> <span class="number">{{ ticket.price.price|floatformat:2 }} €</span></div>
+                </div>
             </div>
         {% endfor %}
     </div>

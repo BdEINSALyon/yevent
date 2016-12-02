@@ -91,6 +91,22 @@ var shop = {};
         if($shop.find('select.seats').length > 0)
             setInterval(refreshSeats, 250);
 
+        function refreshOptions(){
+
+            $shop.find(".options").each(function () {
+                var option_costs = 0;
+                $(this).find('select.option').each(function(){
+                    option_costs += parseFloat($(this).data('price'))*parseInt($(this).val())
+                });
+                var $total = $(this).find(".options_total");
+                $total.find('span.number').html((option_costs+parseFloat($total.data('initial'))).toFixed(2).toString().replace('.',',')+' €')
+            });
+
+        }
+
+        if($shop.find('.options_total').length > 0)
+            setInterval(refreshOptions, 250);
+
     });
 
 })(shop);
