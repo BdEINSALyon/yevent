@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getattr(os.environ, 'SECRET_KEY', 'ohyav@yf+nx1wn-ygmfnmtyd%qf*h=c@6&c_l+sl$fv7babl+*')
-STRIPE_SECRET = getattr(os.environ, 'STRIPE_SECRET', '')
+STRIPE_SECRET = getattr(os.environ, 'STRIPE_SECRET')
 STRIPE_PUBLISHABLE = getattr(os.environ, 'STRIPE_PUBLISHABLE', 'pk_test_99JqWsM82Cj7CwUkgy6jtb8H')
 stripe.api_key = STRIPE_SECRET
 
