@@ -3,7 +3,6 @@
  */
 var AUTH_TOKEN = AUTH_TOKEN || '';
 $(function(){
-    document.domain = 'bde-insa-lyon.fr';
     var ping = true;
 
     setInterval(function () {

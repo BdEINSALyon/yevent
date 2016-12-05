@@ -28,7 +28,7 @@ SECRET_KEY = getattr(os.environ, 'SECRET_KEY', 'ohyav@yf+nx1wn-ygmfnmtyd%qf*h=c@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('PORT', None) is None
 
-ALLOWED_HOSTS = ['gala.dev.bde-insa-lyon.fr', 'billets.gala.bde-insa-lyon.fr', getattr(os.environ, 'HOST', 'localhost')]
+ALLOWED_HOSTS = ['dev.y.bde-insa-lyon.fr', 'gala.y.bde-insa-lyon.fr']
 
 # Application definition
 

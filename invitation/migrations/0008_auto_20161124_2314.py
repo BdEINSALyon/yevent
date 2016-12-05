@@ -21,6 +21,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='guest',
             name='max_seats',
-            field=models.IntegerField(default=invitation.models.Guest.type_max_seats),
+            field=models.IntegerField(default=1),
         ),
     ]

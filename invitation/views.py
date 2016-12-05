@@ -53,12 +53,12 @@ class ShopView(TemplateView):
 
         # Determine reverse to use
         if request.META['HTTP_HOST'] == 'gala.dev.bde-insa-lyon.fr:8000':
-            context['shop_url'] = 'http://yurplan.bde-insa-lyon.fr:8000/event/Lavage-Ecoflute/12752/tickets/widget?' \
+            context['shop_url'] = 'https://y.bde-insa-lyon.fr/event/Lavage-Ecoflute/12752/tickets/widget?' \
                                   'code=GG&default_culture=fr&firstname={first_name}&lastname={last_name}&' \
                                   'email={email}'.format(first_name=guest.first_name, last_name=guest.last_name,
                                                          email=guest.email)
         else:
-            context['shop_url'] = 'https://yurplan.bde-insa-lyon.fr/event/Lavage-Ecoflute/12752/tickets/widget?' \
+            context['shop_url'] = 'https://y.bde-insa-lyon.fr/event/Lavage-Ecoflute/12752/tickets/widget?' \
                                   'from=widget&default_culture=fr&firstname={first_name}&lastname={last_name}&' \
                                   'email={email}'.format(first_name=guest.first_name, last_name=guest.last_name,
                                                          email=guest.email)

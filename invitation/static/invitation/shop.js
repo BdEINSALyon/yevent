@@ -31,7 +31,6 @@ var shop = {};
     };
 
     $(function(){
-        document.domain = 'bde-insa-lyon.fr';
         var $iframe = $("#yurplan-iframe");
 
         document.addEventListener('contextmenu', function(evt) {

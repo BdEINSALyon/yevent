@@ -13,7 +13,6 @@ var shop = {};
     shop.guest = {};
 
     $(function(){
-        document.domain = 'bde-insa-lyon.fr';
 
         setInterval(function () {
             $.get('/shop/ping/'+shop.auth);
