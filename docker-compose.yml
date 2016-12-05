@@ -16,8 +16,6 @@ services:
       - DJANGO_TIMEZONE=Europe/Paris
       - DATABASE_URL=postgres://yevent:yevent@localhost:5432/yevent
 
-    depends_on:
-      - db
     expose:
       - "8000"
     volumes:
