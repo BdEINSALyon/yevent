@@ -97,6 +97,7 @@ var shop = {};
             // Listening loops by states
             switch(shop.state){
                 case SHOP_NOT_READY:
+                    if(shop.guest.check == undefined) break;
                     if($shop.find('.password_event').length>0){
                         shop.state = SHOP_LOGGING;
                         $iframe.one('load', function(){ // When form has been loaded
@@ -107,7 +108,9 @@ var shop = {};
                                 shop.state = SHOP_SELECTING_PRODUCTS;
                             }
                         });
-                        $shop.find('input[name=password]').val('bdeinsa');
+                        $shop.find('input[name=password]').attr('autocomplete','off');
+                        $shop.find('input[name=password]').attr('type','text');
+                        $shop.find('input[name=password]').val(shop.guest.check);
                         $shop.find('input[type=submit]').closest("form").submit();
                     } else if($shop.find('.ticket-event').length>0) {
                         shop.state = SHOP_SELECTING_PRODUCTS;

@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = getattr(os.environ, 'SECRET_KEY', 'ohyav@yf+nx1wn-ygmfnmtyd%qf*h=c@6&c_l+sl$fv7babl+*')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('ENV', None) == "production"
+DEBUG = os.environ.get('ENV', None) != "production"
 
 ALLOWED_HOSTS = ['dev.y.bde-insa-lyon.fr', 'gala.y.bde-insa-lyon.fr', 'yevent', os.environ.get('HOST', 'localhost')]
 
@@ -87,6 +87,7 @@ ANYMAIL = {
 
 EMAIL_BACKEND = "anymail.backends.mailgun.MailgunBackend"
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_FROM', 'Gala INSA Lyon (DEV) <gala@bde-insa-lyon.fr>')
+SHOP_CHECK_CODE = os.environ.get('SHOP_PASS', 'devpass')
 
 WSGI_APPLICATION = 'yevent.wsgi.application'
 
