@@ -14,11 +14,11 @@ def send_email(guest):
     html_template = get_template('invitation/email/{}'.format(template))
     text_template = get_template('invitation/email/guest_link.txt')
 
-    d = Context({'guest': guest, 'host': 'http://'+getattr(os.environ, 'HOST', 'gala.dev.bde-insa-lyon.fr:8000')})
+    d = Context({'guest': guest, 'host': 'https://gala.y.bde-insa-lyon.fr'})
 
     content = html_template.render(d)
     email = EmailMultiAlternatives(subject, text_template.render(d),
-                                   from_email='Gala INSA Lyon <gala@bde-insa-lyon.fr>', to=[guest.email])
+                                   from_email='Gala INSA Lyon <gala.accueil@bde-insa-lyon.fr>', to=[guest.email])
     email.attach_alternative(content, 'text/html')
     email.send()
 
