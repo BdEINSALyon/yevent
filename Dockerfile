@@ -3,6 +3,7 @@ FROM python:3.5
 # Install uWSGI
 RUN pip install uwsgi
 
+RUN apt-get update
 RUN apt-get install -y nodejs npm
 RUN npm -g install yuglify
 
@@ -44,4 +45,6 @@ COPY docker/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD . /app/
 RUN rm -rf static_root
 RUN python manage.py collectstatic --no-input --no-color
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN python manage.py compress --no-color
 CMD ["/usr/bin/supervisord"]
