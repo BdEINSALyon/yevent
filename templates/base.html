@@ -1,5 +1,6 @@
 {% load active_page %}
 {% load static %}
+{% load compress %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +9,9 @@
     <title>{% block title %}Yevent{% endblock %}</title>
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}?"/>
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}?"/>
+    {% endcompress %}
     <script>
         document.domain = 'bde-insa-lyon.fr';
     </script>

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load compress %}
 
 {% block content %}
     {% if seats_left > 0 %}
@@ -18,6 +19,8 @@
 {% endblock %}
 
 {% block javascript %}
-    <script src="{% static 'invitation/shop.js' %}"></script>
-    <script src="{% static 'invitation/ping.js' %}"></script>
+    {% compress js %}
+        <script src="{% static 'invitation/shop.js' %}"></script>
+        <script src="{% static 'invitation/ping.js' %}"></script>
+    {% endcompress %}
 {% endblock %}

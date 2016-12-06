@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_forms_bootstrap',
+    'compressor',
     'import_export',
     'django_premailer',
     'anymail',
@@ -142,4 +143,15 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "invitation/static")
 ]
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
 STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
+
+COMPRESS_JS_FILTERS = ['compressor.filters.yuglify.YUglifyJSFilter']
+COMPRESS_YUGLIFY_BINARY = 'yuglify'
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True

@@ -3,6 +3,9 @@ FROM python:3.5
 # Install uWSGI
 RUN pip install uwsgi
 
+RUN apt-get install -y nodejs npm
+RUN npm -g install yuglify
+
 # Standard set up Nginx
 ENV NGINX_VERSION 1.9.11-1~jessie
 ENV DJANGO_SETTINGS_MODULE yevent.settings
