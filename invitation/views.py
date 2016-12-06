@@ -3,7 +3,6 @@ import string
 from datetime import datetime
 from time import time
 
-from django.apps import config
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404

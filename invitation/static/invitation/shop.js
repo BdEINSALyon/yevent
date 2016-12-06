@@ -2,9 +2,10 @@
  * Created by pvienne on 23/11/2016.
  */
 
-var shop = {};
 
-(function (shop) {
+
+(function () {
+    var shop = {};
     const SHOP_NOT_READY = 'NOT_READY';
     const SHOP_LOGGING = 'LOGGING';
     const SHOP_SELECTING_PRODUCTS = 'SELECTING_PRODUCTS';
@@ -117,10 +118,18 @@ var shop = {};
                     }
                     break;
                 case SHOP_SELECTING_PRODUCTS:
+                    $shop.find('#lost-order').remove();
+                    $shop.find('img[src*=logo]').remove();
+                    if((shop.guest.left_seats||0)<2) {
+                        // Hide 2 seats tickets
+                        $shop.find('#1971.category-label').remove();
+                        $shop.find('#1971.category-container').remove();
+                    }
+
                     // Store all current value for tickets numbers
                     $shop.find('select.nbSeat').each(function () {
                         var factor = 1;
-                        if($('#1971.category-container').has($(this))){
+                        if($shop.find('#1971.category-container').has($(this)).length){
                             factor = 2;
                         }
                         shop.tickets[$(this).attr('name')]=parseInt($(this).val()) * factor;
@@ -132,7 +141,7 @@ var shop = {};
                     // Display allowed values only
                     $shop.find('select.nbSeat').each(function () {
                         var factor = 1;
-                        if($('#1971.category-container').has($(this))){
+                        if($shop.find('#1971.category-container').has($(this)).length){
                             factor = 2;
                         }
                         var selected = parseInt($(this).val());
@@ -169,4 +178,4 @@ var shop = {};
         }, 100);
     });
 
-})(shop);
+})();
