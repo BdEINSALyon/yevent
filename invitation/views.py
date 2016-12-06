@@ -1,3 +1,5 @@
+import random
+import string
 from datetime import datetime
 from time import time
 
@@ -12,6 +14,7 @@ from django.views.generic import FormView
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
+from invitation import email
 from invitation import forms
 from invitation import models
 from invitation import security
@@ -159,11 +162,14 @@ class InviteView(FormView):
             last_name=form.cleaned_data['last_name'],
             email=form.cleaned_data['email'],
             max_seats=seats,
-            type=models.Type.objects.all().exclude(name='Diplômé').last()
+            type=models.Type.objects.all().exclude(name='Diplômé').last(),
+            code=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(24))
         )
         guest.save()
         guest.max_seats = seats
         guest.save()
+        email.send_email(guest)
+
         return self.render_to_response(self.get_context_data(form=forms.GuestForm))
 
     def get_context_data(self, **kwargs):
