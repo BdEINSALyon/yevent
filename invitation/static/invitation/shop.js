@@ -119,7 +119,11 @@ var shop = {};
                 case SHOP_SELECTING_PRODUCTS:
                     // Store all current value for tickets numbers
                     $shop.find('select.nbSeat').each(function () {
-                        shop.tickets[$(this).attr('name')]=parseInt($(this).val());
+                        var factor = 1;
+                        if($('#1971.category-container').has($(this))){
+                            factor = 2;
+                        }
+                        shop.tickets[$(this).attr('name')]=parseInt($(this).val()) * factor;
                     });
 
                     // Compute amount of tickets left
@@ -127,9 +131,13 @@ var shop = {};
 
                     // Display allowed values only
                     $shop.find('select.nbSeat').each(function () {
+                        var factor = 1;
+                        if($('#1971.category-container').has($(this))){
+                            factor = 2;
+                        }
                         var selected = parseInt($(this).val());
                         $(this).children().each(function(){ // Children of select are options
-                            if(parseInt($(this).attr('value')) > selected + left){
+                            if(parseInt($(this).attr('value'))*factor > selected + left){
                                 // Option is hidden if it will exceed amount of allowed tickets
                                 $(this).hide();
                             } else {
