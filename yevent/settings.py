@@ -26,9 +26,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = getattr(os.environ, 'SECRET_KEY', 'ohyav@yf+nx1wn-ygmfnmtyd%qf*h=c@6&c_l+sl$fv7babl+*')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('PORT', None) is None
+DEBUG = os.environ.get('ENV', None) == "production"
 
-ALLOWED_HOSTS = ['dev.y.bde-insa-lyon.fr', 'gala.y.bde-insa-lyon.fr']
+ALLOWED_HOSTS = ['dev.y.bde-insa-lyon.fr', 'gala.y.bde-insa-lyon.fr', 'yevent', os.environ.get('HOST', 'localhost')]
 
 # Application definition
 
