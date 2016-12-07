@@ -153,13 +153,14 @@
                                 $(this).html(count);
                             if(parseInt($(this).attr('value'))*factor > selected + left){
                                 // Option is hidden if it will exceed amount of allowed tickets
-                                $(this).hide();
-                            } else {
-                                // Else display it
-                                $(this).show();
+                                $(this).remove();
                             }
                             count++;
-                        })
+                        });
+                        while(count*factor<=selected + left){
+                            $(this).append("<option value=\""+count+"\">"+count+"</option>");
+                            count++;
+                        }
                     });
                     break;
 
