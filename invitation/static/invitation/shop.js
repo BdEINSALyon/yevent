@@ -148,8 +148,8 @@
                         var count = 0;
                         $(this).children().each(function(){ // Children of select are options
                             $(this).attr('value', count);
-                            if(parseInt($(this).html()) != count)
-                                $(this).html(count);
+                            //if(parseInt($(this).html()) != count)
+                            //    $(this).html(count);
                             if(parseInt($(this).attr('value'))*factor > selected + left){
                                 // Option is hidden if it will exceed amount of allowed tickets
                                 $(this).hide();
