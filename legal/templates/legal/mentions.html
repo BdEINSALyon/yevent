@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Mentions légales{% endblock %}
 {% block content %}
@@ -10,8 +11,8 @@
     </p>
     <h3>Editeur</h3>
     <div class="row">
-    <div class="col-md-2 text-center"><img src="http://logos.bde-insa-lyon.fr/bde/bde.png" width="80%"></div>
-    <div class="col-md-10">
+    <img src="{%  static 'img/bde.png' %}" style="float: left; max-width: 6em; padding: 1em">
+    <div >
         <address>
         <strong>Bureau des Elèves de l'INSA Lyon</strong><br>
         20 avenue Albert Einstein<br>
@@ -29,7 +30,7 @@
     <div class="col-md-10"></div>
     </div>
     <address>
-    <img src="https://yurplan.com/images/logos/mini-logo-orange.png" style="height: 1em;margin: 0.1em" alt="YurPlan SAS"><br>
+    <img src="https://y.bde-insa-lyon.fr/images/logos/mini-logo-orange.png" style="height: 1em;margin: 0.1em" alt="YurPlan SAS"><br>
         1 rue de la république<br>
         69001 Lyon<br>
         France<br>
@@ -39,7 +40,16 @@
     <p><b>Directeur de la publication :</b> Arthur Raynal</p>
     <p><b>Webmaster :</b> Equipe de gestion informatique du BdE INSA Lyon</p>
     <h3>Hébergement</h3>
-    <p>L'hébergement est assuré par le BdE INSA Lyon</p>
+    <p>Les données de ce site sont hébergé par :</p>
+    <address>
+        <img src="https://www.ovh.com/fr/themes/10/main/logo.png" style="height: 2.5em;margin: 0.1em" alt="OVH">
+        <br>
+        SAS au capital de 10 069 020 € <br>
+        RCS Lille Métropole 424 761 419 00045<br>
+        Code APE 2620Z<br>
+        N° TVA : FR 22 424 761 419<br>
+        Siège social : 2 rue Kellermann - 59100 Roubaix - France.
+    </address>
     <h3>Données personnelles </h3>
     <p>Les informations recueillies à partir de ce site font l’objet d’un traitement
         informatique déclaré à la CNIL au n°2012933v0 destiné&nbsp;au :</p>
