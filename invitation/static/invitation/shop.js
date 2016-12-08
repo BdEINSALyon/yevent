@@ -179,7 +179,6 @@ var shop = {};
                             });
                         });
                         { // Handle on the first load
-                            console.log('Handle First load');
                             var left = (shop.guest.left_seats || 0) - (_.reduce(_.values(shop.tickets), function (memo, num) {
                                     return memo + num;
                                 })||0);
@@ -195,14 +194,12 @@ var shop = {};
                                     // Option is hidden if it will exceed amount of allowed tickets
                                     $(this).remove();
                                 }
-                                console.log(parseInt($(this).attr('value')) * factor, selected, left);
                                 count++;
                             });
                             while (count * factor <= selected + left) {
                                 $elem.append("<option value=\"" + count + "\">" + count + "</option>");
                                 count++;
                             }
-                            console.log('End First load', count);
                         }
                     });
                     break;
