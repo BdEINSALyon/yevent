@@ -9,6 +9,7 @@ var shop = {};
     const SHOP_LOGGING = 'LOGGING';
     const SHOP_SELECTING_PRODUCTS = 'SELECTING_PRODUCTS';
     const SHOP_FILLING_FORM = 'FILLING_FORM';
+    const SHOP_WORKSHOP = 'WORKSHOP';
     const SHOP_PAYMENT = 'PAYMENT';
     const SHOP_SUCCESS = 'SUCCESS';
     const SHOP_FAILURE = 'FAILURE';
@@ -68,7 +69,14 @@ var shop = {};
             var $header = $shop.find('.widget-header');
             if($header.length > 0) {
                 // We are on the last
+                var $lastTitle = $header.find('.last');
                 if ($header.find('.active.last').length > 0 && shop.hasNotState([SHOP_SUCCESS, SHOP_FAILURE])) {
+                    if($lastTitle.hasClass('hide')) {
+                        $header.children().addClass('hide');
+                        $lastTitle.removeClass('hide');
+                        $lastTitle.removeClass('col-sm-3');
+                        $lastTitle.removeClass('col-sm-4');
+                    }
                     if ($shop.find('.alert.alert-success').length > 0) {
                         shop.state = SHOP_SUCCESS;
                         // Handle a shop success
@@ -83,16 +91,23 @@ var shop = {};
                     }
                     if($shop.find('.share').parent().parent().css('display')!='none')
                         $shop.find('.share').parent().parent().hide();
-                }
-                if ($header.find('> div:nth-of-type(1)').hasClass('active')){
-                    shop.state = SHOP_SELECTING_PRODUCTS;
-                }
-                if ($header.find('> div:nth-of-type(2)').hasClass('active')){
-                    shop.state = SHOP_FILLING_FORM;
-                }
-                if ($header.find('> div:nth-of-type(4)').length > 0){
-                    if ($header.find('> div:nth-of-type(3)').hasClass('active')){
-                        shop.state = SHOP_PAYMENT;
+                }else {
+                    if ($header.find('> div:nth-of-type(1)').hasClass('active')) {
+                        shop.state = SHOP_SELECTING_PRODUCTS;
+                    }
+                    if ($header.find('> div:nth-of-type(2)').hasClass('active')) {
+                        shop.state = SHOP_FILLING_FORM;
+                    }
+                    if ($header.find('> div:nth-of-type(3)').hasClass('active')) {
+                        shop.state = SHOP_WORKSHOP;
+                    }
+                    if ($header.find('> div:nth-of-type(5)').length > 0) {
+                        if ($header.find('> div:nth-of-type(4)').hasClass('active')) {
+                            shop.state = SHOP_PAYMENT;
+                        }
+                    }
+                    if (!$lastTitle.hasClass('hide')) {
+                        $lastTitle.addClass('hide');
                     }
                 }
             }
@@ -101,6 +116,11 @@ var shop = {};
             $shop.find('img[src*=logo]').remove();
             $shop.find('img[src*=us]').remove();
             $shop.find('img[src*=fr]').remove();
+            $shop.find('#alert-already-ordered').remove();
+            $shop.find('.display-workshop-button').remove();
+            $shop.find('.display-workshop').show();
+            $shop.find('.widget-connect-me').remove();
+            $shop.find('.no-account').remove();
 
             // Listening loops by states
             switch(shop.state){
@@ -204,8 +224,14 @@ var shop = {};
                     });
                     break;
                 case SHOP_FILLING_FORM:
-                    $shop.find('.widget-connect-me').remove();
-                    $shop.find('.no-account').remove();
+                    break;
+                case SHOP_WORKSHOP:
+                    var $cart = $shop.find('.cart');
+                    if($shop.find('.form-actions button').length < 1) {
+                        $cart.find('.toggle-cart').hide();
+                        $cart.find('.cart-list').show().find('hr').remove();
+                        $shop.find('.form-actions').html('<button class="btn btn-default btn-large" type="submit">Suivant</button>');
+                    }
                     break;
             }
 
