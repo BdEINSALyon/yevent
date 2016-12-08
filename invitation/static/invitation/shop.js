@@ -150,6 +150,13 @@ var shop = {};
                             // Sum left seats
                             var left = (shop.guest.left_seats||0) - _.reduce(_.values(shop.tickets), function(memo, num){ return memo + num; });
 
+                            if(left<0){
+                                // Bug!
+                                $shop.find('select.nbSeat').val(0);
+                                shop.tickets = {};
+                                left = shop.guest.left_seats||0;
+                            }
+
                             // Update each select
                             $shop.find('select.nbSeat').each(function () {
                                 var factor = 1;
