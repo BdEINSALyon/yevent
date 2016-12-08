@@ -2,10 +2,9 @@
  * Created by pvienne on 23/11/2016.
  */
 
-
+var shop = {};
 
 (function () {
-    var shop = {};
     const SHOP_NOT_READY = 'NOT_READY';
     const SHOP_LOGGING = 'LOGGING';
     const SHOP_SELECTING_PRODUCTS = 'SELECTING_PRODUCTS';
@@ -126,41 +125,55 @@
                         $shop.find('#1971.category-container').remove();
                     }
 
-                    // Store all current value for tickets numbers
-                    $shop.find('select.nbSeat').each(function () {
-                        var factor = 1;
-                        if($shop.find('#1971.category-container').has($(this)).length){
-                            factor = 2;
-                        }
-                        shop.tickets[$(this).attr('name')]=parseInt($(this).val()) * factor;
-                    });
-
-                    // Compute amount of tickets left
-                    var left = (shop.guest.left_seats||0) - _.reduce(_.values(shop.tickets), function(memo, num){ return memo + num; });
-
-                    // Display allowed values only
-                    $shop.find('select.nbSeat').each(function () {
-                        var factor = 1;
-                        if($shop.find('#1971.category-container').has($(this)).length){
-                            factor = 2;
-                        }
-                        var selected = parseInt($(this).val());
-                        var count = 0;
-                        $(this).children().each(function(){ // Children of select are options
-                            if(parseInt($(this).attr('value')) != count)
+                    $shop.find('select.nbSeat').each(function(){
+                        var $elem = $(this);
+                        var $elemEvents = $._data(this, "events");
+                        $elem.children().each(function(count) { // Children of select are options
+                            if (parseInt($(this).attr('value')) != count || parseInt($(this).html()) != count) {
                                 $(this).attr('value', count);
-                            if(parseInt($(this).html()) != count)
                                 $(this).html(count);
-                            if(parseInt($(this).attr('value'))*factor > selected + left){
-                                // Option is hidden if it will exceed amount of allowed tickets
-                                $(this).remove();
                             }
-                            count++;
                         });
-                        while(count*factor <= selected + left){
-                            $(this).append("<option value=\""+count+"\">"+count+"</option>");
-                            count++;
+                        if($elemEvents != undefined && $elemEvents['change'] != undefined){
+                            return; // We are already bind
                         }
+                        var check = function(){ // When a select is changed
+                            // Factor by two seats if it's a 2 people pack
+                            var factor = 1;
+                            if($shop.find('#1971.category-container').has($(this)).length){
+                                factor = 2;
+                            }
+
+                            // Update the count array of tickets
+                            shop.tickets[$(this).attr('name')]=parseInt($(this).val()) * factor;
+
+                            // Sum left seats
+                            var left = (shop.guest.left_seats||0) - _.reduce(_.values(shop.tickets), function(memo, num){ return memo + num; });
+
+                            // Update each select
+                            $shop.find('select.nbSeat').each(function () {
+                                var factor = 1;
+                                if($shop.find('#1971.category-container').has($(this)).length){
+                                    factor = 2;
+                                }
+                                var selected = parseInt($(this).val()) * factor;
+                                var count = 0;
+                                $(this).children().each(function(){ // Children of select are options
+                                    if(parseInt($(this).attr('value'))*factor > selected + left){
+                                        // Option is hidden if it will exceed amount of allowed tickets
+                                        $(this).remove();
+                                    }
+                                    count++;
+                                });
+                                while(count*factor <= selected + left){
+                                    $(this).append("<option value=\""+count+"\">"+count+"</option>");
+                                    count++;
+                                }
+                            });
+
+                        };
+                        $elem.change(check);
+                        check();
                     });
                     break;
 

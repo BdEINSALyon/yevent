@@ -153,5 +153,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
 
 COMPRESS_JS_FILTERS = ['compressor.filters.yuglify.YUglifyJSFilter']
 COMPRESS_YUGLIFY_BINARY = 'yuglify'
-COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
+if os.environ.get('HOST', 'localhost') == 'gala.dev.bde-insa-lyon.fr':
+    # Do not compress assets for local dev
+    COMPRESS_ENABLED = False
+    COMPRESS_OFFLINE = False
+else:
+    COMPRESS_ENABLED = True
+    COMPRESS_OFFLINE = True
