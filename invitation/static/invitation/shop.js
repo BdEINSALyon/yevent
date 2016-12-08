@@ -84,6 +84,9 @@ var shop = {};
                     if($shop.find('.share').parent().parent().css('display')!='none')
                         $shop.find('.share').parent().parent().hide();
                 }
+                if ($header.find('> div:nth-of-type(1)').hasClass('active')){
+                    shop.state = SHOP_SELECTING_PRODUCTS;
+                }
                 if ($header.find('> div:nth-of-type(2)').hasClass('active')){
                     shop.state = SHOP_FILLING_FORM;
                 }
@@ -93,6 +96,11 @@ var shop = {};
                     }
                 }
             }
+
+            $shop.find('#lost-order').remove();
+            $shop.find('img[src*=logo]').remove();
+            $shop.find('img[src*=us]').remove();
+            $shop.find('img[src*=fr]').remove();
 
             // Listening loops by states
             switch(shop.state){
@@ -117,8 +125,6 @@ var shop = {};
                     }
                     break;
                 case SHOP_SELECTING_PRODUCTS:
-                    $shop.find('#lost-order').remove();
-                    $shop.find('img[src*=logo]').remove();
                     if((shop.guest.left_seats||0)<2) {
                         // Hide 2 seats tickets
                         $shop.find('#1971.category-label').remove();
@@ -137,7 +143,8 @@ var shop = {};
                         if($elemEvents != undefined && $elemEvents['change'] != undefined){
                             return; // We are already bind
                         }
-                        var check = function(){ // When a select is changed
+
+                        $elem.change(function(){ // When a select is changed
                             // Factor by two seats if it's a 2 people pack
                             var factor = 1;
                             if($shop.find('#1971.category-container').has($(this)).length){
@@ -170,13 +177,39 @@ var shop = {};
                                     count++;
                                 }
                             });
-
-                        };
-                        $elem.change(check);
-                        check();
+                        });
+                        { // Handle on the first load
+                            console.log('Handle First load');
+                            var left = (shop.guest.left_seats || 0) - (_.reduce(_.values(shop.tickets), function (memo, num) {
+                                    return memo + num;
+                                })||0);
+                            // Factor by two seats if it's a 2 people pack
+                            var factor = 1;
+                            if ($shop.find('#1971.category-container').has($(this)).length) {
+                                factor = 2;
+                            }
+                            var selected = parseInt($(this).val()) * factor;
+                            var count = 0;
+                            $elem.children().each(function () { // Children of select are options
+                                if (parseInt($(this).attr('value')) * factor > selected + left) {
+                                    // Option is hidden if it will exceed amount of allowed tickets
+                                    $(this).remove();
+                                }
+                                console.log(parseInt($(this).attr('value')) * factor, selected, left);
+                                count++;
+                            });
+                            while (count * factor <= selected + left) {
+                                $elem.append("<option value=\"" + count + "\">" + count + "</option>");
+                                count++;
+                            }
+                            console.log('End First load', count);
+                        }
                     });
                     break;
-
+                case SHOP_FILLING_FORM:
+                    $shop.find('.widget-connect-me').remove();
+                    $shop.find('.no-account').remove();
+                    break;
             }
 
             // Update display
