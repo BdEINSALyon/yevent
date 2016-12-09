@@ -7,7 +7,7 @@ from .models import Guest, Order, Type
 
 @admin.register(Guest)
 class GuestAdmin(ImportExportModelAdmin):
-    actions = ['send_email']
+    actions = ['send_email','send_email_force']
     list_filter = ('email', 'invited_by')
 
     def send_email(self, request, queryset):
@@ -21,7 +21,19 @@ class GuestAdmin(ImportExportModelAdmin):
                 pass
         self.message_user(request, "{} email(s) envoyé à {} personne(s)".format(count, queryset.count()))
 
+    def send_email_force(self, request, queryset):
+        count = 0
+        for guest in queryset.all():
+            # noinspection PyBroadException
+            try:
+                email.send_email(guest)
+                count += 1
+            except:
+                pass
+        self.message_user(request, "{} email(s) envoyé à {} personne(s)".format(count, queryset.count()))
+
     send_email.short_description = "Envoyer le mail d'invitation"
+    send_email_force.short_description = "Forcer l'envoie du mail d'invitation"
 
 
 @admin.register(Order)
