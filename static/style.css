@@ -34,12 +34,12 @@ body > .container:first-of-type {
 }
 
 #header .navbar-nav > .active > a {
-    background-color: #52bdb6;
+    background-color: #70bf96;
     color: #FFFFFF;
 }
 
 #header .navbar-nav > li > a:hover {
-    background-color: #e8485b;
+    background-color: #333;
     color: #FFFFFF;
 }
 

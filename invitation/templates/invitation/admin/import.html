@@ -9,8 +9,8 @@
 <div class="breadcrumbs">
 <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
 &rsaquo; <a href="{% url 'admin:app_list' app_label='invitation' %}">{{ 'invitations'|capfirst|escape }}</a>
-&rsaquo; <a href="">Guests</a>
-&rsaquo; {% block breadcrumbs_last %}{% endblock %}
+&rsaquo; <a href="..">Guests</a>
+&rsaquo; Import
 </div>
 {% endblock %}
 {% endif %}
