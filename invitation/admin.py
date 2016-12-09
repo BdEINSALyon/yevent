@@ -7,15 +7,19 @@ from .models import Guest, Order, Type
 
 @admin.register(Guest)
 class GuestAdmin(ImportExportModelAdmin):
-    actions = ['send_email','send_email_force']
-    list_filter = ('email', 'invited_by')
+    actions = ['send_email', 'send_email_force']
+    list_filter = ('email_received',)
+    list_display = ('first_name', 'last_name', 'email', 'email_received', 'max_seats')
+    # Good but ugly : list_editable = ('email_received', 'max_seats')
+    search_fields = ('first_name', 'last_name', 'email')
 
     def send_email(self, request, queryset):
         count = 0
         for guest in queryset.all():
             # noinspection PyBroadException
             try:
-                email.send_email(guest)
+                if not guest.email_received:
+                    email.send_email(guest)
                 count += 1
             except:
                 pass
