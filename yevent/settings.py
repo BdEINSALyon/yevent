@@ -160,3 +160,5 @@ if os.environ.get('HOST', 'localhost') == 'gala.dev.bde-insa-lyon.fr':
 else:
     COMPRESS_ENABLED = True
     COMPRESS_OFFLINE = True
+
+GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS', 'UA-71047487-8')
