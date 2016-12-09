@@ -8,6 +8,7 @@ from .models import Guest, Order, Type
 @admin.register(Guest)
 class GuestAdmin(ImportExportModelAdmin):
     actions = ['send_email']
+    list_filter = ('email', 'invited_by')
 
     def send_email(self, request, queryset):
         count = 0
