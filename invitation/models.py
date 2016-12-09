@@ -1,6 +1,6 @@
 # coding=utf-8
 import string
-from random import random
+import random
 from time import time
 
 from django.core import urlresolvers
@@ -70,8 +70,8 @@ class Guest(models.Model):
     def generate_code(self):
         if self.code == '' or self.code is None:
             while True:
-                code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(40))
-                if Guest.objects.filter(code=code).count() < 1:
+                self.code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32))
+                if Guest.objects.filter(code=self.code).count() < 1:
                     break
 
     def send_email(self):

@@ -2,10 +2,11 @@ import os
 
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib import messages
 from django.contrib.admin import ModelAdmin
 from django.core.exceptions import ValidationError
 from django.forms import forms
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from import_export.admin import ImportExportModelAdmin
 
 from invitation import email
@@ -17,7 +18,7 @@ from xlrd import open_workbook
 class GuestAdmin(ModelAdmin):
     actions = ['send_email', 'send_email_force']
     list_filter = ('email_received',)
-    list_display = ('first_name', 'last_name', 'email', 'email_received', 'max_seats')
+    list_display = ('first_name', 'last_name', 'email', 'email_received', 'code', 'max_seats')
     # Good but ugly : list_editable = ('email_received', 'max_seats')
     search_fields = ('first_name', 'last_name', 'email')
     change_list_template = 'invitation/admin/change_list.html'
@@ -71,6 +72,7 @@ class GuestAdmin(ModelAdmin):
             form = GuestImportForm(request.POST, request.FILES)
 
             if form.is_valid():
+                sum = 0
                 with open_workbook(file_contents=request.FILES['file'].read()) as wb:
                     for sheet in wb.sheets():
                         number_of_rows = sheet.nrows
@@ -87,11 +89,16 @@ class GuestAdmin(ModelAdmin):
                                     value = sheet.cell(row, col).value
                                     values[headers[col]] = value
                                 product = Guest(**values)
-                                product.save()
-
-                self.message_user(request, 'Produits importés')
+                                if Guest.objects.filter(email=product.email).count() < 1:
+                                    product.type = Type.objects.first()
+                                    product.generate_code()
+                                    product.save()
+                                    sum += 1
+                self.message_user(request, '{} invité(s) importé(s)'.format(sum))
+                return redirect("admin:invitation_guest_changelist")
             else:
-                self.message_user(request, 'Formulaire invalide')
+                self.message_user(request, 'Formulaire invalide', level=messages.ERROR)
+                return redirect("admin:invitation_guest_import")
 
         else:
             form = GuestImportForm()

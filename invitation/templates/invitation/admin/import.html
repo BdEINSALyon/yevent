@@ -16,5 +16,13 @@
 {% endif %}
 
 {% block content %}
-Hello
+    <h1>Importer</h1>
+            <form action="" method="post" id="invite-form" class="row" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+                <div class="form-actions row">
+                    <button type="submit" class="col-md-6 col-md-offset-3 btn btn-primary">Inviter</button>
+                </div>
+            </form>
+
 {% endblock %}
