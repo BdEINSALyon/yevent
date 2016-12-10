@@ -1,4 +1,5 @@
 {% load premailer %}
+{% load staticfiles %}
 
 {% premailer host %}
 <!DOCTYPE html>
@@ -131,14 +132,14 @@
             font-size: 14px;
             font-weight: normal;
             margin: 0;
-            Margin-bottom: 15px;
+            margin-bottom: 15px;
         }
 
         p li,
         ul li,
         ol li {
             list-style-position: inside;
-            margin-left: 5px;
+            /*margin-left: 5px;*/
         }
 
         a {
@@ -170,10 +171,10 @@
 
         .btn a {
             background-color: #ffffff;
-            border: solid 1px #3498db;
+            border: solid 1px #70bf96;
             border-radius: 5px;
             box-sizing: border-box;
-            color: #3498db;
+            color: #70bf96;
             cursor: pointer;
             display: inline-block;
             font-size: 14px;
@@ -184,13 +185,45 @@
         }
 
         .btn-primary table td {
-            background-color: #3498db;
+            background-color: #70bf96;
+            border-color: #70bf96;
+            color: #FFFFFF;
         }
 
         .btn-primary a {
-            background-color: #3498db;
-            border-color: #3498db;
-            color: #ffffff;
+            background-color: #70bf96;
+            border-color: #70bf96;
+            color: #FFFFFF;
+        }
+
+        h3 {
+            color: #70bf96;
+            font-weight: bolder;
+            margin-bottom: 0.85em;
+        }
+
+        h4 {
+            font-weight: bolder;
+            margin-left: 2em;
+            margin-bottom: 0.5em;
+        }
+
+        h3 > .price, h4 > .price{
+            color: #000;
+            font-weight: normal;
+            font-size: 14px;
+        }
+
+        p.price-desc {
+            text-align: justify;
+            margin-left: 3em;
+        }
+
+        ul{
+            padding-left: 10px;
+        }
+        ul li{
+            list-style: square;
         }
 
         /* -------------------------------------
@@ -354,12 +387,11 @@
 
                 <!-- HEADER -->
                 {% block header %}
-                    <table style="text-align: center;width: 100%;background: #e8485b">
+                    <table style="text-align: center;width: 100%;background: white">
                         <tbody>
                         <tr>
                             <td>
-                                <img src="https://raw.githubusercontent.com/BdEINSALyon/wevent/master/web/img/g_gala_gala.png">
-                                <h2 style="color: #fff !important; ">Gala INSA Lyon</h2>
+                                <img src="{% static 'invitation/email.png' %}" style="background: white">
                             </td>
                         </tr>
                         </tbody>
@@ -372,34 +404,6 @@
                     <tr>
                         <td class="wrapper">
                             {% block content %}
-                            <table border="0" cellpadding="0" cellspacing="0">
-                                <tr>
-                                    <td>
-                                        <p>Hi there,</p>
-                                        <p>Sometimes you just want to send a simple HTML email with a simple design and
-                                            clear call to action. This is it.</p>
-                                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                                            <tbody>
-                                            <tr>
-                                                <td align="left">
-                                                    <table border="0" cellpadding="0" cellspacing="0">
-                                                        <tbody>
-                                                        <tr>
-                                                            <td><a href="http://htmlemail.io" target="_blank">Call To
-                                                                Action</a></td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <p>This is a really simple email template. Its sole purpose is to get the
-                                            recipient to click the button with no distractions.</p>
-                                        <p>Good luck! Hope it works.</p>
-                                    </td>
-                                </tr>
-                            </table>
                             {% endblock %}
                         </td>
                     </tr>
@@ -415,7 +419,13 @@
                                 <span>Ce mail vous a été envoyé par</span><br>
                                 <span class="apple-link">BdE INSA Lyon, 20 avenue Albert Einstein, 69621 Villeurbanne CEDEX</span><br>
                                 <span><a href="http://bde.insa-lyon.org"
-                                         target="_blank">http://bde.insa-lyon.org</a></span>
+                                         target="_blank">http://bde.insa-lyon.org</a></span><br><br>
+                                <span><a href="https://gala.y.bde-insa-lyon.fr"
+                                         target="_blank">Mentions Légales</a></span><br>
+
+                                <span>Si vous n'arrivez pas à lire ce mail, visitez la page</span><br>
+                                <span><a href="{{ host }}{% url 'email' code=guest.code %}"
+                                         target="_blank">{{ host }}{% url 'email' code=guest.code %}</a></span><br><br>
                             </td>
                         </tr>
                     </table>

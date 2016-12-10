@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^shop/ping/(?P<code>[A-Za-z0-9+/=]*)$', views.PingView.as_view(), name='ping'),
     url(r'^shop/complete/(?P<code>[A-Za-z0-9+/=]*)$', views.CompleteView.as_view(), name='complete'),
     url(r'^invite/(?P<code>[A-Za-z0-9+/=\-]*)$', views.InviteView.as_view(), name='invite'),
+    url(r'^email/(?P<code>[A-Za-z0-9+/=\-]*)$', views.EmailView.as_view(), name='email'),
     url(r'^ping$', ping.ping, name='ping'),
     url(r'^halt$', ping.halt, name='halt')
 ]

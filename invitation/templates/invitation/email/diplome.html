@@ -7,18 +7,22 @@
         <tr>
             <td>
                 <p>Bonjour {{ guest.first_name }},</p>
-                <p>Vous êtes invité à participer au GALA 21 de l'INSA Lyon pour votre remise de diplôme.</p>
-                <p>Ce Gala vous est exclusivement dédié, à vous les diplômés 2016 INSA Lyon. 
-                    C'est donc dans une ambiance intime que vous allez pouvoir célébrer votre diplôme avec
-                    toute votre promo ainsi que vos proches. Pour qu'un maximum d'entre vous puisse se
-                    retrouver et profiter pleinement de cette soirée, le nombre d'invités est limité
-                    à 7 personnes.</p>
-                <h2>Modalités de fonctionnement</h2>
+                <p style="text-align: justify">Vous êtes invité à participer à la 21ème édition du GALA de l'INSA Lyon pour votre remise de diplôme.</p>
+                <p style="text-align: justify">Ce Gala vous est exclusivement dédié, à vous les diplômés de l’INSA Lyon. C’est donc dans une
+                    ambiance intime que vous allez pouvoir célébrer votre diplôme avec toute votre promotion ainsi
+                    que vos proches. Pour qu’un maximum d’entre vous puisse se retrouver et profiter pleinement de
+                    cette soirée, le nombre d’invités est limité à sept personnes par diplômé. </p>
+                <h2>Mode d’emploi de la billetterie</h2>
                 <ul>
                     <li>Ce mail contient un lien unique et personnel vers la billetterie.</li>
                     <li>Vous avez la possibilité de réserver votre place et celles de vos invités. </li>
-                    <li>Après votre paiement, vous pouvez nous transmettre une liste d'invités supplémentaires.
-                        Ils recevront à leur tour par mail un lien pour réserver leur place.</li>
+                    <li>Après votre paiement, vous pouvez renseigner une liste d’invités sur la plateforme. Ils
+                        recevront par mail un lien pour réserver leur place.
+                    </li>
+                    <li> Votre lien sera fonctionnel jusqu’à la clôture de la billetterie. Vous pourrez donc acheter
+                        des billets supplémentaires à tout moment, dans la limite des 7 invités et des places
+                        disponibles.
+                    </li>
                 </ul>
                 <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                     <tbody>
@@ -27,7 +31,8 @@
                             <table border="0" cellpadding="0" cellspacing="0">
                                 <tbody>
                                 <tr>
-                                    <td><a href="{{ host }}{% url 'shop' code=guest.code %}" target="_blank">Accéder à la billetterie</a></td>
+                                    <td><a href="{{ host }}{% url 'shop' code=guest.code %}" target="_blank">Accéder à
+                                        la billetterie</a></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -36,61 +41,83 @@
                     </tbody>
                 </table>
                 <h2>Les formules proposées</h2>
-                <p>Nous vous proposons cette année trois types de billets&nbsp;:</p>
-                <h3>Les packs avec nuit à l'hôtel</h3>
-                <ul>
-                    <li><b>Le pack Week-end : </b>
-                        <p>230€ pour une personne, 330€ pour deux</p>
-                        <p>Avec le pack Week-end vous n'avez à vous préoccuper de rien, notre équipe vous accompagne
-                            tout au long de ce week-end exceptionnel.</p>
-                        <p>Vous êtes convié au dîner de gala (pack Dîner ci-dessous), avec une bouteille de
-                            champagne offerte.</p>
-                        <p>L'hôtel, à deux pas de la sucrière, est réservé pour les vendredi et samedi soirs,
-                            petit-déjeuner compris.</p>
-                        <p>Les trajets de votre arrivée à la gare le vendredi jusqu'à votre retour à l'hôtel le
-                            samedi soir seront pris en charge.</p>
-                    </li>
-                    <li><b>Le pack Nuitée : </b>
-                        <p>170€ pour une personne, 250€ pour deux</p>
-                        <p>Le pack Nuitée vous permet aussi de profiter totalement de votre soirée de Gala avec
-                            le dîner, une bouteille de champagne et la nuit. L'hôtel, à côté de la sucrière, est
-                            réservé uniquement pour le samedi soir (petit-déjeuner compris).</p>
-                        <p>Vos trajets seront pris en charge dès votre arrivée samedi jusqu'à votre retour à l'hôtel à
-                            la fin de la soirée.</p>
-                    </li>
-                </ul>
-                <h3>Les packs repas</h3>
-                <ul>
-                    <li><b>Le pack Dîner : 70€</b>
-                        <p></p>
-                        <p>Le pack Dîner permet de débuter la soirée de Gala dès 19h. C'est l'occasion de partager un
-                            repas chaleureux entouré de vos proches. Musiciens et artistes se relaieront pour animer
-                            ce dîner. </p>
-                    </li>
-                    <li><b>Le pack Cocktail dinatoire : 50€</b>
-                        <p></p>
-                        <p>A partir de 19H30, le pack Cocktail dinatoire vous invite à partager un assortiment de mets
-                            préparés par notre traiteur. Vous profiterez également du spectacle depuis
-                            la mezzanine. </p>
-                    </li>
-                </ul>
-                <h3>Le pack Soirée : 35€</h3>
-                <p>Si vous souhaitez ne participer qu'à la soirée, le pack Soirée vous permet de rejoindre l'ensemble
-                    de la promotion dès 22h.</p>
-                <h3>Arrivée en péniche : +25€</h3>
-                <p>Au vue de la situation exceptionnelle de la Sucrière sur les bords de la Saône, nous proposons une
-                    arrivée en péniche au Gala. Vous pourrez profiter d'une vue exceptionnelle de Lyon et d'un moment
-                    unique à bord avec petits fours et champagne.</p>
-                <h3>Bouteille de Champagne : +30€</h3>
-                <p>Afin de profiter au mieux de votre soirée, nous vous proposons de précommander une bouteille de
-                    champagne Pommery. Vous pourrez la récupérer à l'un de nos bars le jour J. Attention, les bouteilles
-                    Pommery sur place seront en nombre limité !</p>
-                <p>Quelque soit le billet choisi, des navettes seront à la disposition des participants pour lier le
-                    campus et la soirée, à l'aller comme au retour. Pour tout savoir sur le déroulé de la journée et
-                    les moyens de transport à votre disposition, suivez les actualités du Gala sur notre
-                    <a href="http://gala.bde-insa-lyon.fr">site internet</a>
-                    et notre page Facebook.</p>
-                <p>&Agrave; bientôt au Gala INSA Lyon !</p>
+                <p>Nous vous proposons cette année trois types de billets &nbsp;:</p>
+                <h3>Le pack Soirée&nbsp;: <span class="price">36 euros</span></h3>
+                <p class="price-desc">Si vous ne désirez participer qu’à la soirée, le pack Soirée vous permet de
+                    rejoindre l’ensemble de la promotion dès 22H.</p>
+                <h3>Les packs repas&nbsp;:</h3>
+                <h4>Le pack Dîner&nbsp;: <span class="price">70 euros</span></h4>
+                <p class="price-desc">Le pack Dîner permet de débuter la soirée de Gala dès 19h. C’est l’occasion de
+                    partager un repas chaleureux entouré de vos proches. Musiciens et artistes se relaieront pour
+                    animer ce dîner.</p>
+                <h4>Le pack Cocktail dînatoire&nbsp;: <span class="price">50 euros</span></h4>
+                <p class="price-desc">A partir de 19h30, le pack Cocktail dînatoire vous invite à partager un
+                    assortiment de mets variés et gourmands préparés par notre traiteur. Vous profiterez du spectacle
+                    depuis la mezzanine dans une ambiance conviviale.</p>
+                <h3>Les packs avec nuit à l’hôtel&nbsp;:</h3>
+                <h4>Le pack Week-end&nbsp;: <span class="price">230 euros pour une personne, 330 euros pour deux</span>
+                </h4>
+                <p class="price-desc">Avec le pack Week-end vous n’avez à vous préoccuper de rien, notre équipe vous
+                    accompagne tout au long de ce week-end exceptionnel.</p>
+                <p class="price-desc">Vous êtes convié au dîner de gala (Pack dîner ci-dessus), avec une bouteille de
+                    champagne offerte.</p>
+                <p class="price-desc">L’hôtel, à deux pas de la sucrière, est réservé pour les vendredi et samedi soirs,
+                    petit-déjeuner compris.</p>
+                <p class="price-desc">Les trajets de votre arrivée à la gare le vendredi jusqu’à votre retour à l’hôtel
+                    le samedi soir seront pris en charge.</p>
+                <h4>Le pack Nuitée&nbsp;: <span class="price">170 euros pour une personne, 250 euros pour deux</span>
+                </h4>
+                <p class="price-desc">Le pack Nuitée vous permet aussi de profiter totalement de votre soirée de Gala
+                    avec le dîner, une
+                    bouteille de champagne et la nuit. L’hôtel, à côté de la sucrière, est réservé uniquement pour le
+                    samedi soir (petit-déjeuner compris).</p>
+                <p class="price-desc">Vos trajets seront pris en charge dès votre arrivée samedi jusqu’à votre retour à
+                    l’hôtel à la fin de
+                    la
+                    soirée.</p>
+
+                <h3>Supplément péniche&nbsp;: <span class="price">+25 euros </span></h3>
+                <p class="price-desc">Au vu de la situation exceptionnelle de la Sucrière sur les bords de la Saône,
+                    nous vous proposons
+                    une
+                    arrivée en péniche au Gala. Vous pourrez profiter d’une vue exceptionnelle de Lyon et d’un moment
+                    unique
+                    à bord avec petits fours et champagne.</p>
+                <h3>Supplément Champagne&nbsp;: <span class="price">+30 euros</span></h3>
+                <p class="price-desc">Afin de profiter au mieux de votre soirée, nous vous proposons de précommander une
+                    bouteille de
+                    champagne
+                    Pommery. Vous pourrez la récupérer à l’un de nos bars le jour J. Attention, les bouteilles Pommery
+                    ne
+                    pourront être achetées lors de la soirée. Cette offre exclusive n’est disponible que depuis votre
+                    billetterie.</p>
+
+
+                <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                    <tbody>
+                    <tr>
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                <tr>
+                                    <td><a href="http://gala.bde-insa-lyon.fr" target="_blank">Accéder au site du
+                                        Gala</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>Quel que soit le billet choisi, des navettes seront à la disposition des participants pour lier le
+                    campus et la sucrière, à l’aller comme au retour. Pour tout savoir sur le déroulé de la journée et
+                    les moyens de transport à votre disposition, suivez les actualités du Gala sur <a
+                            href="http://gala.bde-insa-lyon.fr" target="_blank">notre site internet</a>
+                    et <a href="https://www.facebook.com/GalaInsaLyon" target="_blank">notre page Facebook</a>.</p>
+
+
+                <p>Vous pouvez également contacter l’équipe via mail à l’adresse&nbsp;:
+                    <a href="mailto: gala.accueil@bde-insa-lyon.fr">gala.accueil@bde-insa-lyon.fr</a></p>
             </td>
         </tr>
     </table>

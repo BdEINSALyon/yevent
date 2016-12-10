@@ -6,7 +6,7 @@ from time import time
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.template.response import SimpleTemplateResponse
+from django.template.response import SimpleTemplateResponse, TemplateResponse
 from django.utils import timezone
 from django.views import View
 from django.views.generic import FormView
@@ -177,3 +177,12 @@ class InviteView(FormView):
         kwargs['guests'] = sender.guests.all()
         kwargs['auth'] = sender.auth_token()
         return super(BaseFormView, self).get_context_data(**kwargs)
+
+
+class EmailView(View):
+    def get(self, request, *args, **kwargs):
+        guest = get_object_or_404(models.Guest, code=kwargs['code'])
+        template = 'diplome.html'
+        if guest.invited_by:
+            template = 'invite.html'
+        return TemplateResponse(request, 'invitation/email/{}'.format(template), context={'guest': guest, 'host': 'https://gala.dev.bde-insa-lyon.fr'})
