@@ -53,11 +53,14 @@ var shop = {};
 
             // Retrieve iFrame content
             try {
+                if($iframe.attr('scrolling') != 'no')
+                    $iframe.attr('scrolling', 'no');
                 $shop = $iframe.contents();
             } catch(e){ // Can not access to the iFrame content
-                if(shop.state != SHOP_NOT_READY){
-                    $iframe.hide();
-                }
+                if($iframe.attr('scrolling') != 'auto')
+                    $iframe.attr('scrolling', 'auto');
+                if($iframe.height() != '650px')
+                    $iframe.height('650px');
                 return;
             }
 
@@ -230,7 +233,8 @@ var shop = {};
                     if($shop.find('.form-actions button').length < 1) {
                         $cart.find('.toggle-cart').hide();
                         $cart.find('.cart-list').show().find('hr').remove();
-                        $shop.find('.form-actions').html('<button class="btn btn-default btn-large" type="submit">Suivant</button>');
+                        $shop.find('.form-actions').html('' +
+                            '<button class="btn btn-default btn-large" type="submit">Suivant</button>');
                     }
                     break;
             }
