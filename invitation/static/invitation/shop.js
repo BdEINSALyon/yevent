@@ -40,6 +40,7 @@ var shop = {};
         }, false);
 
         $iframe.on('load', function () {
+            console.log('Frame Loaded');
 
             // Retrieve iFrame content
             try {
@@ -56,6 +57,45 @@ var shop = {};
                 return;
             }
 
+            var location = $iframe[0].contentWindow.location.href;
+            console.log(location);
+
+            if(location.match(/\/form\/advanced/g)){
+                shop.state = SHOP_FILLING_FORM;
+            } else if(location.match(/\/shop\//g)) {
+                shop.state = SHOP_WORKSHOP;
+            } else if(location.match(/\/confirm\/([A-Z0-9]+)\/validation/g)){
+                shop.order_id = /\/confirm\/([A-Z0-9]+)\/validation/g.exec(location)[1];
+                shop.state = SHOP_PAYMENT;
+                var count = _.reduce(_.values(shop.tickets), function(memo, num){ return memo + num; });
+                $shop.find('form').submit(function(){
+                    $.get('/shop/complete/'+$iframe.data('auth')+
+                        '?yurplan_id='+encodeURIComponent(shop.order_id)+'&seats_count='+count, function (result) {
+                        console.log(result)
+                    })
+                });
+            } else if($shop.find('.password_event').length>0){
+                shop.state = SHOP_NOT_READY;
+            } else {
+                if($shop.find('.widget-header .active.last').length>0){
+                    var $header = $shop.find('.widget-header');
+                    var $lastTitle = $header.find('.last');
+                     if($lastTitle.hasClass('hide')) {
+                        $header.children().addClass('hide');
+                        $lastTitle.removeClass('hide');
+                        $lastTitle.removeClass('col-sm-3');
+                        $lastTitle.removeClass('col-sm-4');
+                    }
+                    if ($shop.find('.alert.alert-success').length > 0) {
+                        shop.state = SHOP_SUCCESS;
+                    } else {
+                        shop.state = SHOP_FAILURE;
+                    }
+                } else {
+                    shop.state = SHOP_SELECTING_PRODUCTS;
+                }
+            }
+
             $iframe.contents()[0].addEventListener('contextmenu', function(evt) {
               evt.preventDefault();
             }, false);
@@ -69,59 +109,12 @@ var shop = {};
             $shop.find('.display-workshop').show();
             $shop.find('.widget-connect-me').remove();
             $shop.find('.no-account').remove();
-
-            $header = $shop.find('.widget-header');
-            if($header.length > 0) {
-                // We are on the last
-                var $lastTitle = $header.find('.last');
-                if ($header.find('.active.last').length > 0 && shop.hasNotState([SHOP_SUCCESS, SHOP_FAILURE])) {
-                    if($lastTitle.hasClass('hide')) {
-                        $header.children().addClass('hide');
-                        $lastTitle.removeClass('hide');
-                        $lastTitle.removeClass('col-sm-3');
-                        $lastTitle.removeClass('col-sm-4');
-                    }
-                    if ($shop.find('.alert.alert-success').length > 0) {
-                        shop.state = SHOP_SUCCESS;
-                        // Handle a shop success
-                        var yurplan_id = $($shop.find('.alert.alert-success a')[0]).attr('href').split('?',2)[0];
-                        var count = _.reduce(_.values(shop.tickets), function(memo, num){ return memo + num; });
-                        $.get('/shop/complete/'+$iframe.data('auth')+
-                            '?yurplan_id='+encodeURIComponent(yurplan_id)+'&seats_count='+count, function (result) {
-                            console.log(result)
-                        })
-                    } else {
-                        shop.state = SHOP_FAILURE;
-                    }
-                    if($shop.find('.share').parent().parent().css('display')!='none')
-                        $shop.find('.share').parent().parent().hide();
-                }else {
-                    if ($header.find('> div:nth-of-type(1)').hasClass('active')) {
-                        shop.state = SHOP_SELECTING_PRODUCTS;
-                    }
-                    if ($header.find('> div:nth-of-type(2)').hasClass('active')) {
-                        shop.state = SHOP_FILLING_FORM;
-                    }
-                    if ($header.find('> div:nth-of-type(3)').hasClass('active')) {
-                        shop.state = SHOP_WORKSHOP;
-                    }
-                    if ($header.find('> div:nth-of-type(5)').length > 0) {
-                        if ($header.find('> div:nth-of-type(4)').hasClass('active')) {
-                            shop.state = SHOP_PAYMENT;
-                        }
-                    }
-                    if (!$lastTitle.hasClass('hide')) {
-                        $lastTitle.addClass('hide');
-                    }
-                }
-            }
         });
 
         $.get('/shop/config/'+$iframe.data('auth'), function(response){
             shop.guest = response;
         });
         var $shop = null;
-        var $header = null;
 
         setInterval(function shopStateDetection(){
 
