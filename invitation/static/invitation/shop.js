@@ -32,6 +32,42 @@ var shop = {};
         return !shop.hasState(states);
     };
 
+    shop.timeoutToRefresh = function(){
+        setInterval(function(){
+            $.get('/shop/orders/'+shop.order_id+'.json', function(order){
+                if(order.status == 1){
+                    clearTimeout(refreshTimeout);
+                    // Thanks for your order
+                    $("#yurplan-iframe").addClass('hidden');
+                    $("#timeout").hide();
+                    $("#success").show();
+                    $("#success-image").show();
+                } else if(order.status >= 2) {
+                    clearTimeout(refreshTimeout);
+                    // Error to process
+                    $("#yurplan-iframe").addClass('hidden');
+                    $("#timeout").hide();
+                    $("#error").show();
+                }
+            })
+        }, 5*1000);
+        var timeLeft = 3.5*60;
+        function timecounter(){
+            timeLeft--;
+            if(timeLeft <= 0){
+                window.location.reload(true);
+                return;
+            }
+            var minutes = Math.floor(timeLeft/60);
+            $('#timeout-minutes').html((minutes<10?'0':'')+minutes.toString());
+            var seconds = Math.floor(timeLeft%60);
+            $('#timeout-seconds').html((seconds<10?'0':'')+seconds.toString());
+            refreshTimeout = setTimeout(timecounter, 1000);
+        }
+        var refreshTimeout = setTimeout(timecounter, 1000);
+        $("#timeout").show();
+    };
+
     $(function(){
         var $iframe = $("#yurplan-iframe");
 
@@ -72,7 +108,8 @@ var shop = {};
                     $.get('/shop/complete/'+$iframe.data('auth')+
                         '?yurplan_id='+encodeURIComponent(shop.order_id)+'&seats_count='+count, function (result) {
                         console.log(result)
-                    })
+                    });
+                    shop.timeoutToRefresh();
                 });
             } else if($shop.find('.password_event').length>0){
                 shop.state = SHOP_NOT_READY;

@@ -1,15 +1,17 @@
 # coding=utf-8
-import string
 import random
+import string
+from datetime import timedelta, datetime
+from threading import Thread
 from time import time
 
-from django.core import urlresolvers
-from django.core.mail import EmailMultiAlternatives
 from django.db import models
+from django.db.models import Q
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
 
 from invitation import security
+from invitation import yurplan
 
 
 class Guest(models.Model):
@@ -55,7 +57,7 @@ class Guest(models.Model):
     last_seen_at = models.DateTimeField(verbose_name='dernière visite', auto_created=True, blank=True, null=True)
 
     def available_seats(self):
-        order_seats = self.orders.aggregate(count=Coalesce(Sum('seats_count'), 0)).get('count', 0)
+        order_seats = self.orders.filter(Q(status=0, created_at__gte=(datetime.now() - timedelta(minutes=4))) | Q(status=1)).aggregate(count=Coalesce(Sum('seats_count'), 0)).get('count', 0)
         guests_count = self.guests.aggregate(count=Coalesce(Sum('max_seats'), 0)).get('count', 0)
         return self.max_seats - order_seats - guests_count
 
@@ -73,29 +75,6 @@ class Guest(models.Model):
                 self.code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32))
                 if Guest.objects.filter(code=self.code).count() < 1:
                     break
-
-    def send_email(self):
-        msg = EmailMultiAlternatives(
-            subject="Gala INSA Lyon 2017",
-            body="Accedez à la boutique : {}".format(urlresolvers.reverse('shop', {'code': self.code})),
-            from_email="Example <admin@example.com>",
-            to=["New User <user1@example.com>", "account.manager@example.com"],
-            reply_to=["Helpdesk <support@example.com>"])
-
-        # Include an inline image in the html:
-        logo_cid = attach_inline_image_file(msg, "/path/to/logo.jpg")
-        html = """<img alt="Logo" src="cid:{logo_cid}">
-                  <p>Please <a href="http://example.com/activate">activate</a>
-                  your account</p>""".format(logo_cid=logo_cid)
-        msg.attach_alternative(html, "text/html")
-
-        # Optional Anymail extensions:
-        msg.metadata = {"user_id": "8675309", "experiment_variation": 1}
-        msg.tags = ["activation", "onboarding"]
-        msg.track_clicks = True
-
-        # Send it:
-        msg.send()
 
 
 class Type(models.Model):
@@ -115,9 +94,32 @@ class Order(models.Model):
 
     yurplan_id = models.CharField(max_length=100, verbose_name='ID Yurplan')
     seats_count = models.IntegerField(verbose_name='nombre de places')
+    status = models.IntegerField(verbose_name='statut de la commande', choices=((0, 'En cours'), (1, 'payée'), (2, 'annulée'), (3, 'annulée (délais)')))
+    created_at = models.DateTimeField(auto_now_add=True)
     guest = models.ForeignKey(
         'Guest',
         null=False,
         blank=False,
         related_name='orders'
     )
+
+    def load_from_api(self):
+        RefreshOrderThread(self).start()
+
+    def __str__(self):
+        return "{} ({})".format(self.yurplan_id, self.guest)
+
+
+class RefreshOrderThread(Thread):
+
+    def __init__(self, order):
+        super().__init__()
+        self.order = order
+
+    def run(self):
+        import time
+        while self.order.status == 0:
+            yurplan_order = yurplan.ApiClient().get_order(self.order.yurplan_id)
+            self.order.status = yurplan_order['status']
+            self.order.save()
+            time.sleep(5)

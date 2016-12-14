@@ -28,7 +28,8 @@ urlpatterns = [
     url(r'^shop/complete/(?P<code>[A-Za-z0-9+/=]*)$', views.CompleteView.as_view(), name='complete'),
     url(r'^invite/(?P<code>[A-Za-z0-9+/=\-]*)$', views.InviteView.as_view(), name='invite'),
     url(r'^email/(?P<code>[A-Za-z0-9+/=\-]*)$', views.EmailView.as_view(), name='email'),
-    url(r'^yurplan_webhook$',  csrf_exempt(views.WebhookView.as_view()), name='email'),
+    url(r'^yurplan_webhook$',  csrf_exempt(views.WebhookView.as_view()), name='webhook'),
+    url(r'^shop/orders/(?P<id>YPTB[0-9]+)\.json$',  csrf_exempt(views.OrderApiView.as_view()), name='orders_api'),
     url(r'^ping$', ping.ping, name='ping'),
     url(r'^halt$', ping.halt, name='halt')
 ]

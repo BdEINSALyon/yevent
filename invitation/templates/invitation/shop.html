@@ -4,6 +4,19 @@
 
 {% block content %}
     {% if seats_left > 0 %}
+        <div id="timeout" class="alert alert-info" style="display: none;">
+            <b>Attention !</b> La session de validation du paiement est limitée en temps. Cette page se fermera dans <span id="timeout-minutes">03</span>:<span id="timeout-seconds">30</span>.
+        </div>
+        <div id="success-image" class="text-center" style="display: none; margin: 1em;">
+            <img src="{% static 'invitation/email.png' %}" style="max-width:100%">
+            <h1>A bientôt au Gala XXI</h1>
+        </div>
+        <div id="success" class="alert alert-success" style="display: none;">
+            <b>Succès !</b> Votre commande a été passée avec succès, vous receverez vos billets par email.
+        </div>
+        <div id="error" class="alert alert-danger" style="display: none;">
+            <b>Erreur !</b> Votre commande a échoué, veuillez réessayer en rechargeant cette page.
+        </div>
         <div class="width:100%; float:left">
             <iframe id="yurplan-iframe" src="{{ shop_url }}" data-auth="{{ code }}" height="500px" width="100%" scrolling="no" frameborder="0"></iframe>
         </div>

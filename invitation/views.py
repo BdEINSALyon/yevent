@@ -19,6 +19,7 @@ from invitation import email
 from invitation import forms
 from invitation import models
 from invitation import security
+from invitation import yurplan
 from invitation.models import Order
 
 
@@ -116,8 +117,10 @@ class CompleteView(View):
         # Load Guest from security code
         guest = get_object_or_404(models.Guest, code=data['user'])
 
-        success = Order(yurplan_id=request.GET['yurplan_id'], seats_count=int(request.GET['seats_count']),
-                        guest=guest).save()
+        order = Order(yurplan_id=request.GET['yurplan_id'], seats_count=int(request.GET['seats_count']), guest=guest,
+                      status=0)
+        success = order.save()
+        order.load_from_api()
 
         return JsonResponse({'success': success, 'code': params['code']}, safe=False)
 
@@ -189,6 +192,16 @@ class EmailView(View):
             template = 'invite.html'
         return TemplateResponse(request, 'invitation/email/{}'.format(template),
                                 context={'guest': guest, 'host': 'https://gala.dev.bde-insa-lyon.fr'})
+
+
+class OrderApiView(View):
+    def get(self, req, id):
+        guest = models.Guest.objects.get(code=req.session['user_code'])
+        order = models.Order.objects.get(yurplan_id=id, guest=guest)
+        yurplan_order = yurplan.ApiClient().get_order(order.yurplan_id)
+        order.status = yurplan_order['status']
+        order.save()
+        return JsonResponse(yurplan_order, safe=False)
 
 
 class WebhookView(View):
