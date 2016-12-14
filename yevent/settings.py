@@ -162,3 +162,6 @@ else:
     COMPRESS_OFFLINE = True
 
 GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS', 'UA-71047487-8')
+YURPLAN_EVENT_ID = os.environ.get('YURPLAN_EVENT_ID', '1')
+YURPLAN_APP_ID = os.environ.get('YURPLAN_APP_ID', '1')
+YURPLAN_APP_SECRET = os.environ.get('YURPLAN_APP_SECRET', '1')
