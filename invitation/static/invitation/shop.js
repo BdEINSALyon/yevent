@@ -16,6 +16,7 @@ var shop = {};
 
     shop.state = SHOP_NOT_READY;
     shop.tickets = {};
+    shop.listen = false;
     shop.guest = {};
     shop.registerState = function (state) {
         if(shop.state != state){
@@ -39,34 +40,37 @@ var shop = {};
         }, false);
 
         $iframe.on('load', function () {
-            $iframe.contents()[0].addEventListener('contextmenu', function(evt) {
-              evt.preventDefault();
-            }, false);
-        });
-
-        $.get('/shop/config/'+$iframe.data('auth'), function(response){
-            shop.guest = response;
-        });
-
-        setInterval(function shopStateDetection(){
-            var $shop = null;
 
             // Retrieve iFrame content
             try {
+                if($iframe.attr('scrolling') != 'no')
+                    $iframe.attr('scrolling', 'no');
+                shop.listen = true;
                 $shop = $iframe.contents();
             } catch(e){ // Can not access to the iFrame content
-                if(shop.state != SHOP_NOT_READY){
-                    $iframe.hide();
-                }
+                if($iframe.attr('scrolling') != 'auto')
+                    $iframe.attr('scrolling', 'auto');
+                if($iframe.height() != '650px')
+                    $iframe.height('650px');
+                shop.listen = false;
                 return;
             }
 
-            // If user come back to the start state, go to not ready mode
-            if($shop.find('.password_event').length>0 && shop.hasNotState([SHOP_NOT_READY, SHOP_LOGGING])) {
-                shop.state = SHOP_NOT_READY;
-            }
+            $iframe.contents()[0].addEventListener('contextmenu', function(evt) {
+              evt.preventDefault();
+            }, false);
 
-            var $header = $shop.find('.widget-header');
+            $shop.find('#lost-order').remove();
+            $shop.find('img[src*=logo]').remove();
+            $shop.find('img[src*=us]').remove();
+            $shop.find('img[src*=fr]').remove();
+            $shop.find('#alert-already-ordered').remove();
+            $shop.find('.display-workshop-button').remove();
+            $shop.find('.display-workshop').show();
+            $shop.find('.widget-connect-me').remove();
+            $shop.find('.no-account').remove();
+
+            $header = $shop.find('.widget-header');
             if($header.length > 0) {
                 // We are on the last
                 var $lastTitle = $header.find('.last');
@@ -111,16 +115,22 @@ var shop = {};
                     }
                 }
             }
+        });
 
-            $shop.find('#lost-order').remove();
-            $shop.find('img[src*=logo]').remove();
-            $shop.find('img[src*=us]').remove();
-            $shop.find('img[src*=fr]').remove();
-            $shop.find('#alert-already-ordered').remove();
-            $shop.find('.display-workshop-button').remove();
-            $shop.find('.display-workshop').show();
-            $shop.find('.widget-connect-me').remove();
-            $shop.find('.no-account').remove();
+        $.get('/shop/config/'+$iframe.data('auth'), function(response){
+            shop.guest = response;
+        });
+        var $shop = null;
+        var $header = null;
+
+        setInterval(function shopStateDetection(){
+
+            if(!shop.listen) return;
+
+            // If user come back to the start state, go to not ready mode
+            if($shop.find('.password_event').length>0 && shop.hasNotState([SHOP_NOT_READY, SHOP_LOGGING])) {
+                shop.state = SHOP_NOT_READY;
+            }
 
             // Listening loops by states
             switch(shop.state){
@@ -237,7 +247,6 @@ var shop = {};
                     if($shop.find('.form-actions button').length < 1) {
                         $cart.find('.toggle-cart').hide();
                         $cart.find('.cart-list').show().find('hr').remove();
-                        $shop.find('.form-actions').html('<button class="btn btn-default btn-large" type="submit">Suivant</button>');
                     }
                     break;
             }
@@ -258,7 +267,7 @@ var shop = {};
                     $iframe.hide();
                 }
             }
-        }, 100);
+        }, 300);
     });
 
 })();

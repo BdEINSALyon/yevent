@@ -1,0 +1,28 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static admin_modify %}
+{% load admin_urls %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+{% block bodyclass %}{{ opts.app_label }}-{{ opts.object_name.lower }} change-form{% endblock %}
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label='invitation' %}">{{ 'invitations'|capfirst|escape }}</a>
+&rsaquo; <a href="..">Guests</a>
+&rsaquo; Import
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+    <h1>Importer</h1>
+            <form action="" method="post" id="invite-form" class="row" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+                <div class="form-actions row">
+                    <button type="submit" class="col-md-6 col-md-offset-3 btn btn-primary">Inviter</button>
+                </div>
+            </form>
+
+{% endblock %}

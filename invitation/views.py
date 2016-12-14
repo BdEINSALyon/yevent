@@ -1,12 +1,14 @@
+import json
 import random
 import string
 from datetime import datetime
 from time import time
 
 from django.conf import settings
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.template.response import SimpleTemplateResponse
+from django.template.response import SimpleTemplateResponse, TemplateResponse
 from django.utils import timezone
 from django.views import View
 from django.views.generic import FormView
@@ -145,7 +147,7 @@ class InviteView(FormView):
         if reject is not None:
             return reject
         if guest.invited_by is not None:
-            return self.render_to_response({'guest': guest, 'nope':True})
+            return self.render_to_response({'guest': guest, 'nope': True})
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -177,3 +179,19 @@ class InviteView(FormView):
         kwargs['guests'] = sender.guests.all()
         kwargs['auth'] = sender.auth_token()
         return super(BaseFormView, self).get_context_data(**kwargs)
+
+
+class EmailView(View):
+    def get(self, request, *args, **kwargs):
+        guest = get_object_or_404(models.Guest, code=kwargs['code'])
+        template = 'diplome.html'
+        if guest.invited_by:
+            template = 'invite.html'
+        return TemplateResponse(request, 'invitation/email/{}'.format(template),
+                                context={'guest': guest, 'host': 'https://gala.dev.bde-insa-lyon.fr'})
+
+
+class WebhookView(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body.decode("utf-8"))
+        return HttpResponse('')

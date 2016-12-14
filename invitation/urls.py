@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from invitation import ping
@@ -26,6 +27,8 @@ urlpatterns = [
     url(r'^shop/ping/(?P<code>[A-Za-z0-9+/=]*)$', views.PingView.as_view(), name='ping'),
     url(r'^shop/complete/(?P<code>[A-Za-z0-9+/=]*)$', views.CompleteView.as_view(), name='complete'),
     url(r'^invite/(?P<code>[A-Za-z0-9+/=\-]*)$', views.InviteView.as_view(), name='invite'),
+    url(r'^email/(?P<code>[A-Za-z0-9+/=\-]*)$', views.EmailView.as_view(), name='email'),
+    url(r'^yurplan_webhook$',  csrf_exempt(views.WebhookView.as_view()), name='email'),
     url(r'^ping$', ping.ping, name='ping'),
     url(r'^halt$', ping.halt, name='halt')
 ]

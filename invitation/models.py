@@ -1,6 +1,6 @@
 # coding=utf-8
 import string
-from random import random
+import random
 from time import time
 
 from django.core import urlresolvers
@@ -35,6 +35,7 @@ class Guest(models.Model):
         verbose_name='type'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    email_received = models.BooleanField(default=False, verbose_name='email envoyé')
 
     def type_max_seats(self):
         try:
@@ -50,13 +51,15 @@ class Guest(models.Model):
         if not self.id:
             self.max_seats = self.type_max_seats()
 
-    max_seats = models.IntegerField()
+    max_seats = models.IntegerField(verbose_name='places')
     last_seen_at = models.DateTimeField(verbose_name='dernière visite', auto_created=True, blank=True, null=True)
 
     def available_seats(self):
         order_seats = self.orders.aggregate(count=Coalesce(Sum('seats_count'), 0)).get('count', 0)
         guests_count = self.guests.aggregate(count=Coalesce(Sum('max_seats'), 0)).get('count', 0)
         return self.max_seats - order_seats - guests_count
+
+    available_seats.verbose_name = 'places restantes'
 
     def auth_token(self):
         return security.encrypt({'time': time(), 'user': self.code})
@@ -67,8 +70,8 @@ class Guest(models.Model):
     def generate_code(self):
         if self.code == '' or self.code is None:
             while True:
-                code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(40))
-                if Guest.objects.filter(code=code).count() < 1:
+                self.code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32))
+                if Guest.objects.filter(code=self.code).count() < 1:
                     break
 
     def send_email(self):

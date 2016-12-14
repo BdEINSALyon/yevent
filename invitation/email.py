@@ -6,6 +6,10 @@ from django.template.loader import get_template
 
 
 def send_email(guest):
+    """
+
+    :type guest: invitation.models.Guest
+    """
     template = 'diplome.html'
     subject = 'Gala 2017'
     if guest.invited_by:
@@ -21,4 +25,6 @@ def send_email(guest):
                                    from_email='Gala INSA Lyon <gala.accueil@bde-insa-lyon.fr>', to=[guest.email])
     email.attach_alternative(content, 'text/html')
     email.send()
+    guest.email_received = True
+    guest.save()
 
