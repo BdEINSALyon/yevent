@@ -4,7 +4,7 @@ import requests
 from django.conf import settings
 
 
-class ApiClient():
+class ApiClient:
     _AUTH_TOKEN = ""
 
     @staticmethod
