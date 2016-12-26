@@ -48,3 +48,24 @@ class ApiClient():
                 return self.get_order(order_id, try_auth=False)
             else:
                 return None
+
+    def get_tickets(self, tickets=None, link=None, try_auth=True):
+        if tickets is None:
+            tickets = []
+        link = link or 'https://api.yurplan.com/v1/events/{}/tickets?range=..20'.format(settings.YURPLAN_EVENT_ID)
+        r = requests.get(link,
+                         headers={
+                             'Authorization': 'Bearer {}'.format(ApiClient._AUTH_TOKEN)
+                         })
+        if r.status_code < 400:
+            data = json.loads(r.text)
+            tickets += (data['results'])
+            if 'next' in data['paging']['cursors']:
+                return self.get_tickets(tickets, data['paging']['cursors']['next']['href'], try_auth)
+            return tickets
+        else:
+            if try_auth and r.status_code != 404:
+                ApiClient._authenticate()
+                return self.get_tickets(tickets, link, try_auth)
+            else:
+                return None
