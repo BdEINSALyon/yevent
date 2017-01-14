@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django_premailer',
     'anymail',
     'legal',
-    'invitation'
+    'invitation',
+    'waitlist'
 ]
 
 MIDDLEWARE = [
