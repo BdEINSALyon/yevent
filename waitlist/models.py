@@ -6,9 +6,15 @@ from invitation.models import Guest
 
 class WaitingList(models.Model):
 
+    class Meta:
+        verbose_name = "Liste d'attente"
+
     name = models.CharField(max_length=255)
     enabled = models.BooleanField(default=True)
     maximum_registration_by_guest = models.IntegerField(default=7)
+
+    def __str__(self):
+        return self.name
 
 
 class WaitingTicket(models.Model):
@@ -24,3 +30,6 @@ class WaitingTicket(models.Model):
 
     def position(self):
         return WaitingTicket.objects.filter(created_at__lt=self.created_at, used=False).count()
+
+    def __str__(self):
+        return "{} - {} ({} place(s))".format(self.waiting_list, self.owner, self.amount)
