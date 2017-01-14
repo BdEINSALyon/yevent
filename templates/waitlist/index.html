@@ -4,5 +4,42 @@
 {% load static %}
 
 {% block content %}
-
+    <div class="page-header">
+        <h3 class="text-center">Liste d'attente</h3>
+        <p class="text-center text-muted" style="max-width: 500px; margin: auto">
+            En raison d'une forte demande, nous ne pouvons plus vous vendre certains pack
+            cependant nous vous invitons à vous inscrire sur une liste d'attente et
+            vous contacterons si des places se libèrent.
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <ul class="list-group">
+                {% for ticket in object_list %}
+                    <li class="list-group-item">
+                        <a class="badge text-danger btn-sm pull-right">Annuler</a>
+                        <span class="badge">Position&nbsp;: {{ ticket.position }}</span>
+                        {{ ticket.owner }} - {{ ticket.waiting_list }} - {{ ticket.amount }} place{{ ticket.amount|pluralize }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{#    <div class="page-header">#}
+{#        <h3>Inviter#}
+{#            <small>(Il vous reste {{ left_seats }} places)</small>#}
+{#        </h3>#}
+{#    </div>#}
+{#    {% if left_seats > 0 %}#}
+{#        <form action="" method="post" id="invite-form" class="row">#}
+{#            {% csrf_token %}#}
+{#            {{ form|as_bootstrap_horizontal }}#}
+{#            <div class="form-actions row">#}
+{#                <button type="submit" class="col-md-6 col-md-offset-3 btn btn-primary">Inviter</button>#}
+{#            </div>#}
+{#        </form>#}
+{##}
+{#    {% else %}#}
+{#        <p class="text-center">Vous ne pouvez plus envoyer d'invitations</p>#}
+{#    {% endif %}#}
 {% endblock %}

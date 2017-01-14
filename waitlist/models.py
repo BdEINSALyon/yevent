@@ -29,7 +29,7 @@ class WaitingTicket(models.Model):
     waiting_list = models.ForeignKey(WaitingList)
 
     def position(self):
-        return WaitingTicket.objects.filter(created_at__lt=self.created_at, used=False).count()
+        return WaitingTicket.objects.filter(created_at__lt=self.created_at, used=False).count() + 1
 
     def __str__(self):
         return "{} - {} ({} place(s))".format(self.waiting_list, self.owner, self.amount)
