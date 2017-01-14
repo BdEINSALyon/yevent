@@ -9,6 +9,9 @@ body > .container:first-of-type {
 #invite-form .form-group {
     min-height: 2.45em;
 }
+#register-form .form-group {
+    min-height: 2.45em;
+}
 
 #header {
     padding: 0;

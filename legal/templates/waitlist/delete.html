@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load bootstrap_tags %}
+{% load static %}
+
+{% block content %}
+<form action="" method="post" class="text-center">{% csrf_token %}
+    <p>Voulez vous abandonner votre place dans la liste d'attente "{{ object }}"?</p>
+    <a href="{% url 'waitlist' %}" class="btn btn-default" style="margin-right: 2em">NON</a>
+    <input type="submit" value="OUI" class="btn btn-danger" />
+</form>
+{% endblock %}

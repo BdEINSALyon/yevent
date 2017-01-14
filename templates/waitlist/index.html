@@ -13,33 +13,48 @@
         </p>
     </div>
     <div class="row">
+        {% if object_list %}
         <div class="col-md-6 col-md-offset-3">
             <ul class="list-group">
                 {% for ticket in object_list %}
                     <li class="list-group-item">
-                        <a class="badge text-danger btn-sm pull-right">Annuler</a>
+                        <a href="{% url 'leave_waitlist' ticket.id %}" class="badge text-danger btn-sm pull-right">Annuler</a>
                         <span class="badge">Position&nbsp;: {{ ticket.position }}</span>
                         {{ ticket.owner }} - {{ ticket.waiting_list }} - {{ ticket.amount }} place{{ ticket.amount|pluralize }}
                     </li>
                 {% endfor %}
             </ul>
         </div>
+        {% endif %}
+        <div class="col-md-6 col-md-offset-3">
+            {% if left_seats > 0 %}
+                <form action="{% url 'register_waitlist' %}" method="post" id="register-form" class="row">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="form-group">
+                        <label for="{{ form.waiting_list.id_for_label }}">Type de place</label>
+                        {{ form.waiting_list }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.amount.id_for_label }}">Nombre de places souhaité</label>
+                        {{ form.amount }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.phone.id_for_label }}">Numéro de téléphone pour vous joindre</label>
+                        {{ form.phone }}
+                    </div>
+                    <div class="form-actions row">
+                        <button type="submit" class="col-md-6 col-md-offset-3 btn btn-primary">Inviter</button>
+                    </div>
+                </form>
+            {% else %}
+                <p class="text-center">Vous avez déjà utilisé toutes vos places</p>
+            {% endif %}
+        </div>
     </div>
-{#    <div class="page-header">#}
-{#        <h3>Inviter#}
-{#            <small>(Il vous reste {{ left_seats }} places)</small>#}
-{#        </h3>#}
-{#    </div>#}
-{#    {% if left_seats > 0 %}#}
-{#        <form action="" method="post" id="invite-form" class="row">#}
-{#            {% csrf_token %}#}
-{#            {{ form|as_bootstrap_horizontal }}#}
-{#            <div class="form-actions row">#}
-{#                <button type="submit" class="col-md-6 col-md-offset-3 btn btn-primary">Inviter</button>#}
-{#            </div>#}
-{#        </form>#}
-{##}
-{#    {% else %}#}
-{#        <p class="text-center">Vous ne pouvez plus envoyer d'invitations</p>#}
-{#    {% endif %}#}
+    <script>
+        $(function () {
+            $('#register-form').find('input, select').addClass('form-control');
+        })
+    </script>
 {% endblock %}
