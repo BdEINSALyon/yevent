@@ -57,6 +57,8 @@
                         </li>
                         <li class="{% active_page request 'invite' %}"><a
                                 href="{% url 'invite' code=user_code %}">Invitations</a></li>
+                        <li class="{% active_page request 'waitlist' %}"><a
+                                href="{% url 'waitlist' %}">Liste d'attente</a></li>
                     </ul>
                 </div>
             {% endif %}
