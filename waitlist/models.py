@@ -1,7 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
 from invitation.models import Guest
 
 

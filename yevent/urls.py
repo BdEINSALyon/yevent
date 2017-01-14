@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('invitation.urls')),
+    url(r'^', include('waitlist.urls')),
     url(r'^legal/', include('legal.urls')),
     url(r'^$', TemplateView.as_view(template_name='legal/mentions.html'), name='home')
 ]
