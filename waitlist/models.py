@@ -26,6 +26,7 @@ class WaitingTicket(models.Model):
     amount = models.IntegerField(default=1, verbose_name='nombre')
     created_at = models.DateTimeField(auto_now_add=True)
     used = models.BooleanField(default=False)
+    phone = models.CharField(default="", blank=True, verbose_name="Téléphone", max_length=25)
     waiting_list = models.ForeignKey(WaitingList)
 
     def position(self):
