@@ -20,6 +20,13 @@
         <div class="width:100%; float:left">
             <iframe id="yurplan-iframe" src="{{ shop_url }}" data-auth="{{ code }}" height="500px" width="100%" scrolling="no" frameborder="0"></iframe>
         </div>
+        <div id="issue" class="alert alert-info text-center">
+            <div style="margin-bottom: 1em;">
+                En raison d’une forte demande, certains packs sont indisponibles. Nous vous invitons cependant à vous
+                inscrire sur une liste d’attente et vous contacterons si des places se libèrent.
+            </div>
+            <a href="{% url 'waitlist' %}" class="btn btn-primary">Accèder à la liste d'attente</a>
+        </div>
     {% else %}
         <div class="text-center">
             <h4>Vous n'avez plus de places disponibles.</h4>

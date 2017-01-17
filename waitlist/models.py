@@ -25,12 +25,13 @@ class WaitingTicket(models.Model):
     owner = models.ForeignKey(Guest, verbose_name='propriétaire')
     amount = models.IntegerField(default=1, verbose_name='nombre')
     created_at = models.DateTimeField(auto_now_add=True)
+    registered_at = models.DateTimeField()
     used = models.BooleanField(default=False)
     phone = models.CharField(default="", blank=True, verbose_name="Téléphone", max_length=25)
     waiting_list = models.ForeignKey(WaitingList)
 
     def position(self):
-        return WaitingTicket.objects.filter(created_at__lt=self.created_at, used=False).count() + 1
+        return WaitingTicket.objects.filter(registered_at__lt=self.registered_at, used=False).count() + 1
 
     def __str__(self):
         return "{} - {} ({} place(s))".format(self.waiting_list, self.owner, self.amount)

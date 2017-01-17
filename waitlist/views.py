@@ -1,4 +1,5 @@
 from django.db.models import Sum
+from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -13,7 +14,7 @@ from waitlist.models import WaitingTicket
 
 
 def max_for(guest):
-    return guest.available_seats() - WaitingTicket.objects.filter(owner=guest, used=False).aggregate(Sum('amount'))['amount__sum']
+    return guest.available_seats() - (WaitingTicket.objects.filter(owner=guest, used=False).aggregate(Sum('amount'))['amount__sum'] or 0)
 
 
 class ListWaitRegistrations(ListView):
@@ -52,6 +53,7 @@ class CreateWaitRegistration(CreateView):
         ticket.owner = Guest.objects.get(code=self.request.session['user_code'])
         if ticket.amount > max_for(ticket.owner):
             ticket.amount = max_for(ticket.owner)
+        ticket.registered_at = timezone.now()
         ticket.save()
         return HttpResponseRedirect(reverse_lazy('waitlist'))
 
