@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_forms_bootstrap',
     'compressor',
+    'easy_select2',
     'import_export',
     'django_premailer',
     'anymail',
