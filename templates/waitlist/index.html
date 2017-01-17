@@ -18,9 +18,15 @@
             <ul class="list-group">
                 {% for ticket in object_list %}
                     <li class="list-group-item">
+                    {{ ticket.owner }} - {{ ticket.waiting_list }} - {{ ticket.amount }} place{{ ticket.amount|pluralize }}
                         <a href="{% url 'leave_waitlist' ticket.id %}" class="badge text-danger btn-sm pull-right">Annuler</a>
-                        <span class="badge">Position&nbsp;: {{ ticket.position }}</span>
-                        {{ ticket.owner }} - {{ ticket.waiting_list }} - {{ ticket.amount }} place{{ ticket.amount|pluralize }}
+                        {% if ticket.position < 8 %}
+                            <span class="badge">Vous serez bientôt appelé(e)</span>
+                        {% else %}
+                            <br>
+                            <span class="badge">Il y a plus de 8 demandes devant vous</span>
+                        {% endif %}
+                    &nbsp;
                     </li>
                 {% endfor %}
             </ul>
